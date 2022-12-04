@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:tombalaonline/utils/RandomCode.dart';
+import 'package:tombalaonline/view/LobbyScreen.dart';
 
 import '../ProviderState.dart';
 
@@ -36,6 +38,11 @@ class _CreateOrJoinGameState extends State<CreateOrJoinGame> {
           }, child: Text("Join room")),
           OutlinedButton(onPressed:() {
             //create room
+            Provider.of<providerState>(context, listen: false).createdRoomCode =  createRoomID();
+            print(Provider.of<providerState>(context, listen: false).createdRoomCode);
+            Navigator
+                .of(context)
+                .pushReplacement(new MaterialPageRoute(builder: (BuildContext context) => LobbyScreen()));
           }, child: Text("Create room")),
         ],
       )),

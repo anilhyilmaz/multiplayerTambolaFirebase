@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "889986659069",
+    "project_id": "tambolamultiplayerflutter",
+    "storage_bucket": "tambolamultiplayerflutter.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:889986659069:android:ec47e15e5c3bac30774494",
+        "android_client_info": {
+          "package_name": "com.tombalamulti.tombalamulti.tombalaonline"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "889986659069-c50rihmbl30apan88bd1i727adti348t.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.tombalamulti.tombalamulti.tombalaonline",
+            "certificate_hash": "af3aa7f9ebe6d870af44374a299aba51e8dd18bb"
+          }
+        },
+        {
+          "client_id": "889986659069-d8secvgmu60qj7uvaigfol6vg8ahofgt.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDhnd4GNPJm9h-LkRBWX6UhR0GMSninqgU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "889986659069-d8secvgmu60qj7uvaigfol6vg8ahofgt.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

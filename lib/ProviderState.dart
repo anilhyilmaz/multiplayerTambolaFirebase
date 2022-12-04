@@ -6,6 +6,7 @@ class providerState extends ChangeNotifier{
   bool shouldshow = true;
   var gameRoomCode;
   TextEditingController username = new TextEditingController();
+  var createdRoomCode;
 
   int get getCounter {
     return _count;
