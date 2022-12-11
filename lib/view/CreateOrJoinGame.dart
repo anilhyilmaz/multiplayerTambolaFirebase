@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tombalaonline/utils/RandomCode.dart';
 import 'package:tombalaonline/view/LobbyScreen.dart';
-
 import '../ProviderState.dart';
 
 class CreateOrJoinGame extends StatefulWidget {
@@ -29,7 +28,8 @@ class _CreateOrJoinGameState extends State<CreateOrJoinGame> {
         response = await Dio().get('http://10.0.2.2:3000/getTicket/2');
         gameid = await Firestore.collection("games").add({
           "owner":username.text,
-          "entryCode": Provider.of<providerState>(context, listen: false).entryCode
+          "entryCode": Provider.of<providerState>(context, listen: false).entryCode,
+          "playerCounter":1,
         });
         Provider.of<providerState>(context, listen: false).gameID = gameid.id;
         print("0 ${response.data[0]}");
@@ -48,6 +48,32 @@ class _CreateOrJoinGameState extends State<CreateOrJoinGame> {
         print(e.toString());
       }
     }
+    joingame() async {
+      if (mounted) {
+        var len;
+        FirebaseFirestore Firestore = FirebaseFirestore.instance;
+        var gamesSnapshots = Firestore.collection("games").snapshots();
+        gamesSnapshots.forEach((element) {
+          len = element.docs.length;
+        });
+        await gamesSnapshots.forEach((element) async {
+          for (int i = 0; i < len; i++) {
+            if (Provider.of<providerState>(context, listen: false).joinGameCodeTextEditing.text == await element.docs[i].data()["entryCode"]) {
+              print("uyuştu");
+              print(element.docs[i].data()["entryCode"]);
+              Provider.of<providerState>(context, listen: false).gameID = element.docs[i].id;
+                Provider.of<providerState>(context, listen: false).playerCounter = element.docs[i].data()["playerCounter"];
+              Provider.of<providerState>(context, listen: false).playerCounter++;
+                await Firestore.collection("games")
+                    .doc(element.docs[i].id).update({"playerCounter":Provider.of<providerState>(context, listen: false).playerCounter});
+                print("eklendi");
+                Navigator.of(context).pushReplacement(MaterialPageRoute(
+                    builder: (BuildContext context) => LobbyScreen()));
+            }
+          }
+        });
+      }
+    }
 
     return Scaffold(
       appBar: AppBar(centerTitle: true, title: Text("Create or Join Game")),
@@ -61,12 +87,13 @@ class _CreateOrJoinGameState extends State<CreateOrJoinGame> {
             child: TextField(
               decoration: InputDecoration(hintText: "Type room code"),
               textAlign: TextAlign.center,
-              controller: Provider.of<providerState>(context, listen: false).entryCode,
+              controller: Provider.of<providerState>(context, listen: false).joinGameCodeTextEditing,
             ),
           ),
           OutlinedButton(
               onPressed: () {
                 //search room code
+                joingame();
               },
               child: Text("Join room")),
           OutlinedButton(
@@ -80,3 +107,7 @@ class _CreateOrJoinGameState extends State<CreateOrJoinGame> {
     );
   }
 }
+
+
+
+

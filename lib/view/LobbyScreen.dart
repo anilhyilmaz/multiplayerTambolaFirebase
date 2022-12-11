@@ -50,6 +50,5 @@ class _LobbyScreenState extends State<LobbyScreen> {
   }
   players(snapshot){
     return Text("Players: ");
-
   }
 }
