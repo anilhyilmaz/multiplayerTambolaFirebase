@@ -28,13 +28,11 @@ class _tambolaScreenState extends State<tambolaScreen> {
 
   @override
   Widget build(BuildContext context) {
-    var counter = Provider.of<providerState>(context, listen: false).getCounter;
     return Scaffold(
         body: SafeArea(
           child: Center(
             child: Column(
               children: [
-                Flexible(flex: 1, child: Text(counter.toString())),
                 Flexible(flex: 5, child: showTambolaGrid()),
                 Flexible(
                     flex: 1,
