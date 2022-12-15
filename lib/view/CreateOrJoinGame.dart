@@ -31,6 +31,7 @@ class _CreateOrJoinGameState extends State<CreateOrJoinGame> {
           "entryCode":
               Provider.of<providerState>(context, listen: false).entryCode,
           "playerCounter":0,
+          "isgameStarted":false,
         });
         Provider.of<providerState>(context, listen: false).gameID = gameid.id;
         Navigator.of(context).pushReplacement(MaterialPageRoute(

@@ -5,6 +5,7 @@ showTambolaGrid(){
   return Padding(
     padding: const EdgeInsets.only(bottom: 16,top: 32,left: 16,right: 16),
     child: GridView.builder(
+      shrinkWrap: true,
         itemCount: 27,
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 9),

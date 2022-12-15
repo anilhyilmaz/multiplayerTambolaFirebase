@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -13,11 +15,31 @@ class LobbyScreen extends StatefulWidget {
   State<LobbyScreen> createState() => _LobbyScreenState();
 }
 
+  Timer? timer;
+
+
+
 class _LobbyScreenState extends State<LobbyScreen> {
+
+  var outsnapshot;
+
+  @override
+  void initState() {
+    super.initState();
+    timer = Timer.periodic(Duration(seconds: 15), (Timer t) => checkIfGameStarted(outsnapshot));
+  }
+  @override
+  void dispose() {
+    timer?.cancel();
+    super.dispose();
+  }
+
+
   @override
   Widget build(BuildContext context) {
     FirebaseFirestore Firestore = FirebaseFirestore.instance;
     var gameID = Provider.of<providerState>(context, listen: false).gameID;
+
 
     return Scaffold(
       appBar: AppBar(title: Text("Waiting Room")),
@@ -26,7 +48,7 @@ class _LobbyScreenState extends State<LobbyScreen> {
             stream: Firestore.collection("games").doc(gameID).snapshots(),
             builder: (context, snapshot) {
               if (!snapshot.hasData) {
-                return Text("Loading");
+                return const Text("Loading");
               } else {
                 return Column(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -51,8 +73,8 @@ class _LobbyScreenState extends State<LobbyScreen> {
                               //create start game
                               startgame(snapshot);
                             },
-                            child: Text("Start Game")),
-                      )
+                            child: const Text("Start Game")),
+                      ),
                     ]);
               }
             }),
@@ -61,6 +83,7 @@ class _LobbyScreenState extends State<LobbyScreen> {
   }
 
   entryCode(snapshot) {
+    outsnapshot = snapshot;
     return Text("Entry Code:" + snapshot.data!["entryCode"]);
   }
 
@@ -72,6 +95,15 @@ class _LobbyScreenState extends State<LobbyScreen> {
     return Text(
         snapshot.data!["playerCounter"].toString() + " player is waiting");
   }
+
+  checkIfGameStarted(outsnapshot){
+    var started;
+    started = outsnapshot.data!["isgameStarted"];
+    started == true ? Navigator.of(context).pushReplacement(MaterialPageRoute(
+        builder: (BuildContext context) => gameScreen())) : null;
+  }
+
+
 
   startgame(snapshot) async {
     var response;
@@ -88,19 +120,22 @@ class _LobbyScreenState extends State<LobbyScreen> {
             .update({"ticket${i}.${j}": response.data[i][j]});
       }
     }
-    Navigator.of(context).pushReplacement(MaterialPageRoute(
-        builder: (BuildContext context) => gameScreen()));
+    await Firestore.collection("games")
+        .doc(Provider.of<providerState>(context, listen: false).gameID)
+        .update({"isgameStarted":true});
+    // Navigator.of(context).pushReplacement(MaterialPageRoute(
+    //     builder: (BuildContext context) => gameScreen()));
   }
 
-  playerList(snapshot) {
-    var counter;
-    if (snapshot.data!["playerCounter"] == 0) {
-      return Text("oyun yok");
-    } else {
-      counter = int.parse(snapshot.data!["playerCounter"]);
-      // return ListView.builder(itemCount:counter,itemBuilder:(context,index){
-      //   return Text("Player $index : ${snapshot.data!["player${index+1}"]}");
-      // });
-    }
-  }
+  // playerList(snapshot) {
+  //   var counter;
+  //   if (snapshot.data!["playerCounter"] == 0) {
+  //     return Text("oyun yok");
+  //   } else {
+  //     counter = int.parse(snapshot.data!["playerCounter"]);
+  //     // return ListView.builder(itemCount:counter,itemBuilder:(context,index){
+  //     //   return Text("Player $index : ${snapshot.data!["player${index+1}"]}");
+  //     // });
+  //   }
+  // }
 }

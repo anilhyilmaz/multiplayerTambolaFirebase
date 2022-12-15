@@ -45,10 +45,11 @@ class _gameScreenState extends State<gameScreen> {
                               mainAxisAlignment: MainAxisAlignment.center,
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
-                                Flexible(
-                                  flex: 1,
-                                  child: showTambolaGrid(),
-                                ),
+                                showTambolaGrid(),
+                                // Flexible(
+                                //   flex: 1,
+                                //   child: showTambolaGrid(),
+                                // ),
                               ]);
                         }
                       }),
