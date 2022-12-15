@@ -20,27 +20,19 @@ class _CreateOrJoinGameState extends State<CreateOrJoinGame> {
     var gameid;
 
     creategame() async {
-      var response;
       FirebaseFirestore Firestore = FirebaseFirestore.instance;
       try {
-        Provider.of<providerState>(context, listen: false).entryCode = createRoomID();
+        Provider.of<providerState>(context, listen: false).entryCode =
+            createRoomID();
         print(Provider.of<providerState>(context, listen: false).entryCode);
-        response = await Dio().get('http://10.0.2.2:3000/getTicket/2');
+        // response = await Dio().get('http://10.0.2.2:3000/getTicket/2');
         gameid = await Firestore.collection("games").add({
-          "owner":username.text,
-          "entryCode": Provider.of<providerState>(context, listen: false).entryCode,
-          "playerCounter":1,
+          "owner": username.text,
+          "entryCode":
+              Provider.of<providerState>(context, listen: false).entryCode,
+          "playerCounter":0,
         });
         Provider.of<providerState>(context, listen: false).gameID = gameid.id;
-        print("0 ${response.data[0]}");
-        print("1 ${response.data[1]}");
-        for (int i = 0; i < 2; i++) {
-          for (int j = 0; j < 3; j++) {
-            await Firestore.collection("games")
-                .doc(Provider.of<providerState>(context, listen: false).gameID)
-                .update({"ticket${i}.${j}": response.data[i][j]});
-          }
-        }
         Navigator.of(context).pushReplacement(MaterialPageRoute(
             builder: (BuildContext context) => LobbyScreen()));
         print("game created");
@@ -50,25 +42,35 @@ class _CreateOrJoinGameState extends State<CreateOrJoinGame> {
     }
     joingame() async {
       if (mounted) {
-        var len;
+        print("joined");
+        var len,counter;
         FirebaseFirestore Firestore = FirebaseFirestore.instance;
         var gamesSnapshots = Firestore.collection("games").snapshots();
-        gamesSnapshots.forEach((element) {
-          len = element.docs.length;
-        });
         await gamesSnapshots.forEach((element) async {
+          len = element.docs.length;
           for (int i = 0; i < len; i++) {
-            if (Provider.of<providerState>(context, listen: false).joinGameCodeTextEditing.text == await element.docs[i].data()["entryCode"]) {
+            if (Provider.of<providerState>(context, listen: false)
+                    .joinGameCodeTextEditing
+                    .text ==
+                await element.docs[i].data()["entryCode"]) {
               print("uyuştu");
               print(element.docs[i].data()["entryCode"]);
-              Provider.of<providerState>(context, listen: false).gameID = element.docs[i].id;
-                Provider.of<providerState>(context, listen: false).playerCounter = element.docs[i].data()["playerCounter"];
-              Provider.of<providerState>(context, listen: false).playerCounter++;
-                await Firestore.collection("games")
-                    .doc(element.docs[i].id).update({"playerCounter":Provider.of<providerState>(context, listen: false).playerCounter});
-                print("eklendi");
-                Navigator.of(context).pushReplacement(MaterialPageRoute(
-                    builder: (BuildContext context) => LobbyScreen()));
+              Provider.of<providerState>(context, listen: false).gameID =
+                  element.docs[i].id;
+              counter = await element.docs[i].data()["playerCounter"];
+              counter++;
+              await Firestore.collection("games")
+                  .doc(Provider.of<providerState>(context, listen: false).gameID)
+                  .update({
+                "player${counter}":Provider.of<providerState>(context, listen: false).username.text,
+                "playerCounter":"${counter}"
+              });
+              print("eklendi");
+              Navigator.of(context).pushReplacement(MaterialPageRoute(
+                  builder: (BuildContext context) => LobbyScreen()));
+            }
+            else{
+              print("uyuşmadı");
             }
           }
         });
@@ -87,7 +89,8 @@ class _CreateOrJoinGameState extends State<CreateOrJoinGame> {
             child: TextField(
               decoration: InputDecoration(hintText: "Type room code"),
               textAlign: TextAlign.center,
-              controller: Provider.of<providerState>(context, listen: false).joinGameCodeTextEditing,
+              controller: Provider.of<providerState>(context, listen: false)
+                  .joinGameCodeTextEditing,
             ),
           ),
           OutlinedButton(
@@ -107,7 +110,3 @@ class _CreateOrJoinGameState extends State<CreateOrJoinGame> {
     );
   }
 }
-
-
-
-

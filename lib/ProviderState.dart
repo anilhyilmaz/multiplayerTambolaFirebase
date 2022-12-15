@@ -7,6 +7,7 @@ class providerState extends ChangeNotifier{
   TextEditingController username = new TextEditingController();
   TextEditingController joinGameCodeTextEditing = new TextEditingController();
   List tickets = [];
+  List names = [""];
 
   bool gg(){
     return !shouldshow;

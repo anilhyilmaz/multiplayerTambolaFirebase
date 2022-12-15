@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -29,12 +30,18 @@ class _LobbyScreenState extends State<LobbyScreen> {
               }
               else{
                 return Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      entryCode(snapshot),
-                      owner(snapshot),
-                      players(snapshot),
+                      Flexible(flex: 1,child: entryCode(snapshot),),
+                      Flexible(flex: 1,child: owner(snapshot),),
+                      Flexible(flex: 1,child: playersCounter(snapshot),),
+                      Flexible(flex: 1,child:           OutlinedButton(
+                          onPressed: () {
+                            //create start game
+                            startgame(snapshot);
+                          },
+                          child: Text("Start Game")),)
                     ]);
               }
             }),
@@ -48,7 +55,34 @@ class _LobbyScreenState extends State<LobbyScreen> {
   owner(snapshot){
     return Text("Owner: " + snapshot.data!["owner"]);
   }
-  players(snapshot){
-    return Text("Players: ");
+  playersCounter(snapshot){
+    return Text(snapshot.data!["playerCounter"].toString() +  " player is waiting");
+  }
+  startgame(snapshot) async {
+    var response;
+    FirebaseFirestore Firestore = FirebaseFirestore.instance;
+    var counter = snapshot.data!["playerCounter"];
+    counter++;
+    response =
+        await Dio().get("https://tombalaapiweb.onrender.com/getTicket/$counter");
+    for (int i = 0; i <int.parse(counter); i++) {
+      for (int j = 0; j < 3; j++) {
+        await Firestore.collection("games")
+            .doc(Provider.of<providerState>(context, listen: false).gameID)
+            .update({"ticket${i}.${j}": response.data[i][j]});
+      }
+    }
+  }
+  playerList(snapshot){
+    var counter;
+    if(snapshot.data!["playerCounter"] == 0){
+      return Text("oyun yok");
+    }
+    else{
+      counter = int.parse(snapshot.data!["playerCounter"]);
+      // return ListView.builder(itemCount:counter,itemBuilder:(context,index){
+      //   return Text("Player $index : ${snapshot.data!["player${index+1}"]}");
+      // });
+    }
   }
 }
