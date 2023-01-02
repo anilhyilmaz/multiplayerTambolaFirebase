@@ -20,46 +20,46 @@ class _usernameLoginState extends State<usernameLogin> {
     return Scaffold(
       appBar: AppBar(title: Text("Username")),
       body: Center(
-          child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: TextField(
-              onChanged: (value) {
-                if(value.length < 4){
-                  showinfo;
+          child: Wrap(children: [Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: TextField(
+                  onChanged: (value) {
+                    if(value.length < 4){
+                      showinfo;
+                    }
+                    else{
+                      showinfo = false;
+                    }
+                    print(showinfo);
+                  },
+                  decoration: InputDecoration(hintText: "Type username"),
+                  textAlign: TextAlign.center,
+                  controller: username,
+                ),
+              ),
+
+              Container(
+                child: showinfo == true
+                    ? Text("Must be bigger than 3 letters")
+                    : Text(""),
+              ),
+              OutlinedButton(onPressed:() {
+
+                if(username.text.length < 4){
+                  print("olmaz");
                 }
                 else{
-                showinfo = false;
+                  Navigator
+                      .of(context)
+                      .pushReplacement(new MaterialPageRoute(builder: (BuildContext context) => CreateOrJoinGame()));
                 }
-                print(showinfo);
-              },
-              decoration: InputDecoration(hintText: "Type username"),
-              textAlign: TextAlign.center,
-              controller: username,
-            ),
-          ),
-
-          Container(
-            child: showinfo == true
-                ? Text("Must be bigger than 3 letters")
-                : Text(""),
-          ),
-          OutlinedButton(onPressed:() {
-
-            if(username.text.length < 4){
-              print("olmaz");
-            }
-            else{
-              Navigator
-                  .of(context)
-                  .pushReplacement(new MaterialPageRoute(builder: (BuildContext context) => CreateOrJoinGame()));
-            }
-          }, child: Text("Type username")),
-        ],
-      )),
+              }, child: Text("Type username")),
+            ],
+          )],)),
     );
   }
 }
