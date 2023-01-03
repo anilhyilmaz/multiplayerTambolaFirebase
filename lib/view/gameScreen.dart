@@ -42,232 +42,23 @@ class _gameScreenState extends State<gameScreen> {
                   if (snapshot.hasData &&
                       snapshot.connectionState == ConnectionState.done) {
                     var data = snapshot.data.data();
-                    var playerCounter = int.parse(data['playerCounter'])+1;
-                    var ticket0 = data['ticket0'];
-                    var row0 = ticket0["0"];
-                    var row1 = ticket0["1"];
-                    var row2 = ticket0["2"];
-
-
-
-                    return Padding(
-                      padding: const EdgeInsets.only(bottom: 16, top: 32, left: 16, right: 16),
-                      child: SingleChildScrollView(
-                          scrollDirection: Axis.horizontal,
-                          child: Center(
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                Container(
-                                    height: MediaQuery. of(context). size. height-72,
-                                    width: MediaQuery. of(context). size. width-30,
-                                    child: CustomScrollView(
-                                      primary: false,
-                                      slivers: <Widget>[
-                                        SliverPadding(
-                                          padding: const EdgeInsets.all(20),
-                                          sliver: SliverGrid.count(
-                                            crossAxisSpacing: 10,
-                                            mainAxisSpacing: 10,
-                                            crossAxisCount: 9,
-                                            children: <Widget>[
-                                              Container(
-                                                padding: const EdgeInsets.all(8),
-                                                color: Colors.green[100],
-                                                child: Text(row0[0].toString()),
-                                              ),
-                                              Container(
-                                                padding: const EdgeInsets.all(8),
-                                                color: Colors.green[200],
-                                                child: Text(row0[1].toString()),
-                                              ),
-                                              Container(
-                                                padding: const EdgeInsets.all(8),
-                                                color: Colors.green[300],
-                                                child: Text(row0[2].toString()),
-                                              ),
-                                              Container(
-                                                padding: const EdgeInsets.all(8),
-                                                color: Colors.green[300],
-                                                child: Text(row0[3].toString()),
-                                              ),
-                                              Container(
-                                                padding: const EdgeInsets.all(8),
-                                                color: Colors.green[300],
-                                                child: Text(row0[4].toString()),
-                                              ),
-                                              Container(
-                                                padding: const EdgeInsets.all(8),
-                                                color: Colors.green[300],
-                                                child: Text(row0[5].toString()),
-                                              ),
-                                              Container(
-                                                padding: const EdgeInsets.all(8),
-                                                color: Colors.green[300],
-                                                child: Text(row0[6].toString()),
-                                              ),
-                                              Container(
-                                                padding: const EdgeInsets.all(8),
-                                                color: Colors.green[400],
-                                                child: Text(row0[7].toString()),
-                                              ),
-                                              Container(
-                                                padding: const EdgeInsets.all(8),
-                                                color: Colors.green[500],
-                                                child: Text(row0[8].toString()),
-                                              ),
-                                              Container(
-                                                padding: const EdgeInsets.all(8),
-                                                color: Colors.green[600],
-                                                child: Text(row1[0].toString()),
-                                              ),
-                                              Container(
-                                                padding: const EdgeInsets.all(8),
-                                                color: Colors.green[600],
-                                                child: Text(row1[1].toString()),
-                                              ),
-                                              Container(
-                                                padding: const EdgeInsets.all(8),
-                                                color: Colors.green[600],
-                                                child: Text(row1[2].toString()),
-                                              ),
-                                              Container(
-                                                padding: const EdgeInsets.all(8),
-                                                color: Colors.green[600],
-                                                child: Text(row1[3].toString()),
-                                              ),
-                                              Container(
-                                                padding: const EdgeInsets.all(8),
-                                                color: Colors.green[600],
-                                                child: Text(row1[4].toString()),
-                                              ),
-                                              Container(
-                                                padding: const EdgeInsets.all(8),
-                                                color: Colors.green[600],
-                                                child: Text(row1[5].toString()),
-                                              ),
-                                              Container(
-                                                padding: const EdgeInsets.all(8),
-                                                color: Colors.green[600],
-                                                child: Text(row1[6].toString()),
-                                              ),
-                                              Container(
-                                                padding: const EdgeInsets.all(8),
-                                                color: Colors.green[600],
-                                                child: Text(row1[7].toString()),
-                                              ),
-                                              Container(
-                                                padding: const EdgeInsets.all(8),
-                                                color: Colors.green[600],
-                                                child: Text(row1[8].toString()),
-                                              ),
-                                              Container(
-                                                padding: const EdgeInsets.all(8),
-                                                color: Colors.green[600],
-                                                child: Text(row2[0].toString()),
-                                              ),
-                                              Container(
-                                                padding: const EdgeInsets.all(8),
-                                                color: Colors.green[600],
-                                                child: Text(row2[1].toString()),
-                                              ),
-                                              Container(
-                                                padding: const EdgeInsets.all(8),
-                                                color: Colors.green[600],
-                                                child: Text(row2[2].toString()),
-                                              ),
-                                              Container(
-                                                padding: const EdgeInsets.all(8),
-                                                color: Colors.green[600],
-                                                child: Text(row2[3].toString()),
-                                              ),
-                                              Container(
-                                                padding: const EdgeInsets.all(8),
-                                                color: Colors.green[600],
-                                                child: Text(row2[4].toString()),
-                                              ),
-                                              Container(
-                                                padding: const EdgeInsets.all(8),
-                                                color: Colors.green[600],
-                                                child: Text(row2[5].toString()),
-                                              ),
-                                              Container(
-                                                padding: const EdgeInsets.all(8),
-                                                color: Colors.green[600],
-                                                child: Text(row2[6].toString()),
-                                              ),
-                                              Container(
-                                                padding: const EdgeInsets.all(8),
-                                                color: Colors.green[600],
-                                                child: Text(row2[7].toString()),
-                                              ),
-                                              Container(
-                                                padding: const EdgeInsets.all(8),
-                                                color: Colors.green[600],
-                                                child: Text(row2[8].toString()),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      ],
-                                    )
-                                ),
-                                Container(
-                                  child: Text(
-                                    "ggg",
-                                  ),
-                                  height: 200,
-                                  width: 200,
-                                ),
-                                Container(
-                                  child: Text(
-                                    "ggg",
-                                  ),
-                                  height: 200,
-                                  width: 200,
-                                ),
-                                Container(
-                                  child: Text(
-                                    "ggg",
-                                  ),
-                                  height: 200,
-                                  width: 200,
-                                ),
-                                Container(
-                                  child: Text(
-                                    "ggg",
-                                  ),
-                                  height: 200,
-                                  width: 200,
-                                ),
-                                Container(
-                                  child: Text(
-                                    "ggg",
-                                  ),
-                                  height: 200,
-                                  width: 200,
-                                ),
-                                Container(
-                                  child: Text(
-                                    "ggg",
-                                  ),
-                                  height: 200,
-                                  width: 200,
-                                ),
-                                Container(
-                                  child: Text(
-                                    "ggg",
-                                  ),
-                                  height: 200,
-                                  width: 200,
-                                ),
-                              ],
-                            ),
-                          )),
-                    );
+                    List<int> playerCounterList = [];
+                    var playerCounter = int.parse(data['playerCounter']) + 1;
+                    for (int i = 0; i < playerCounter; i++) {
+                      playerCounterList.add(i);
+                    }
+                    return SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        child: Row(
+                          children: [
+                            for (var i in playerCounterList)
+                              Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [Ticket(data, i)]),
+                          ],
+                        ));
                   } else {
-                    return Text("Error");
+                    return const Text("Error");
                   }
                 },
               ),
@@ -276,5 +67,262 @@ class _gameScreenState extends State<gameScreen> {
         ),
       ),
     ));
+  }
+
+  Widget Ticket(var data, var i) {
+    return Column(
+      children: [
+        SizedBox(height: 10,),
+        const SizedBox(
+          child: Text("f"),
+        ),
+        SizedBox(height: 10,),
+        Container(
+            alignment: Alignment.center,
+            height: MediaQuery.of(context).size.height-64,
+            width: MediaQuery.of(context).size.width,
+            child: CustomScrollView(
+              slivers: <Widget>[
+                SliverPadding(
+                  padding: const EdgeInsets.only(left: 8,right: 32,top: 6,bottom: 0),
+                  sliver: SliverGrid.count(
+                    crossAxisSpacing: 10,
+                    mainAxisSpacing: 10,
+                    crossAxisCount: 9,
+                    children: <Widget>[
+                      Container(
+                        padding: const EdgeInsets.all(8),
+                        color: Colors.white,
+                        child: Center(
+                          child: Text(
+                              data['ticket$i']["0"][0] == 0
+                                  ? ""
+                                  : data['ticket$i']["0"][0].toString(),
+                              textAlign: TextAlign.center),
+                        ),
+                      ),
+                      Container(
+                        padding: const EdgeInsets.all(8),
+                        color: Colors.orange,
+                        child: Center(
+                          child: Text(data['ticket$i']["0"][1] == 0
+                              ? ""
+                              : data['ticket$i']["0"][1].toString()),
+                        ),
+                      ),
+                      Container(
+                        padding: const EdgeInsets.all(8),
+                        color: Colors.white,
+                        child: Center(
+                          child: Text(data['ticket$i']["0"][2] == 0
+                              ? ""
+                              : data['ticket$i']["0"][2].toString()),
+                        ),
+                      ),
+                      Container(
+                        padding: const EdgeInsets.all(8),
+                        color: Colors.orange,
+                        child: Center(
+                          child: Text(
+                            data['ticket$i']["0"][3] == 0
+                                ? ""
+                                : data['ticket$i']["0"][3].toString(),
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+                      ),
+                      Container(
+                          padding: const EdgeInsets.all(8),
+                          color: Colors.white,
+                          child: Center(
+                            child: Text(data['ticket$i']["0"][4] == 0
+                                ? ""
+                                : data['ticket$i']["0"][4].toString()),
+                          )),
+                      Container(
+                        padding: const EdgeInsets.all(8),
+                        color: Colors.orange,
+                        child: Center(
+                          child: Text(data['ticket$i']["0"][5] == 0
+                              ? ""
+                              : data['ticket$i']["0"][5].toString()),
+                        ),
+                      ),
+                      Container(
+                        padding: const EdgeInsets.all(8),
+                        color: Colors.white,
+                        child: Center(
+                            child: Text(data['ticket$i']["0"][6] == 0
+                                ? ""
+                                : data['ticket$i']["0"][6].toString())),
+                      ),
+                      Container(
+                        padding: const EdgeInsets.all(8),
+                        color: Colors.orange,
+                        child: Center(
+                            child: Text(data['ticket$i']["0"][7] == 0
+                                ? ""
+                                : data['ticket$i']["0"][7].toString())),
+                      ),
+                      Container(
+                        padding: const EdgeInsets.all(8),
+                        color: Colors.white,
+                        child: Center(
+                            child: Text(data['ticket$i']["0"][8] == 0
+                                ? ""
+                                : data['ticket$i']["0"][8].toString())),
+                      ),
+                      Container(
+                        padding: const EdgeInsets.all(8),
+                        color: Colors.orange,
+                        child: Center(
+                            child: Text(data['ticket$i']["1"][0] == 0
+                                ? ""
+                                : data['ticket$i']["1"][0].toString())),
+                      ),
+                      Container(
+                        padding: const EdgeInsets.all(8),
+                        color: Colors.white,
+                        child: Center(
+                            child: Text(data['ticket$i']["1"][1] == 0
+                                ? ""
+                                : data['ticket$i']["1"][1].toString())),
+                      ),
+                      Container(
+                        padding: const EdgeInsets.all(8),
+                        color: Colors.orange,
+                        child: Center(
+                            child: Text(data['ticket$i']["1"][2] == 0
+                                ? ""
+                                : data['ticket$i']["1"][2].toString())),
+                      ),
+                      Container(
+                        padding: const EdgeInsets.all(8),
+                        color: Colors.white,
+                        child: Center(
+                            child: Text(data['ticket$i']["1"][3] == 0
+                                ? ""
+                                : data['ticket$i']["1"][3].toString())),
+                      ),
+                      Container(
+                        padding: const EdgeInsets.all(8),
+                        color: Colors.orange,
+                        child: Center(
+                            child: Text(data['ticket$i']["1"][4] == 0
+                                ? ""
+                                : data['ticket$i']["1"][4].toString())),
+                      ),
+                      Container(
+                        padding: const EdgeInsets.all(8),
+                        color: Colors.white,
+                        child: Center(
+                            child: Text(data['ticket$i']["1"][5] == 0
+                                ? ""
+                                : data['ticket$i']["1"][5].toString())),
+                      ),
+                      Container(
+                        padding: const EdgeInsets.all(8),
+                        color: Colors.orange,
+                        child: Center(
+                            child: Text(data['ticket$i']["1"][6] == 0
+                                ? ""
+                                : data['ticket$i']["1"][6].toString())),
+                      ),
+                      Container(
+                        padding: const EdgeInsets.all(8),
+                        color: Colors.white,
+                        child: Center(
+                            child: Text(data['ticket$i']["1"][7] == 0
+                                ? ""
+                                : data['ticket$i']["1"][7].toString())),
+                      ),
+                      Container(
+                        padding: const EdgeInsets.all(8),
+                        color: Colors.orange,
+                        child: Center(
+                            child: Text(data['ticket$i']["1"][8] == 0
+                                ? ""
+                                : data['ticket$i']["1"][8].toString())),
+                      ),
+                      Container(
+                        padding: const EdgeInsets.all(8),
+                        color: Colors.white,
+                        child: Center(
+                            child: Text(data['ticket$i']["2"][0] == 0
+                                ? ""
+                                : data['ticket$i']["2"][0].toString())),
+                      ),
+                      Container(
+                        padding: const EdgeInsets.all(8),
+                        color: Colors.orange,
+                        child: Center(
+                            child: Text(data['ticket$i']["2"][1] == 0
+                                ? ""
+                                : data['ticket$i']["2"][1].toString())),
+                      ),
+                      Container(
+                        padding: const EdgeInsets.all(8),
+                        color: Colors.white,
+                        child: Center(
+                            child: Text(data['ticket$i']["2"][2] == 0
+                                ? ""
+                                : data['ticket$i']["2"][2].toString())),
+                      ),
+                      Container(
+                        padding: const EdgeInsets.all(8),
+                        color: Colors.orange,
+                        child: Center(
+                            child: Text(data['ticket$i']["2"][3] == 0
+                                ? ""
+                                : data['ticket$i']["2"][3].toString())),
+                      ),
+                      Container(
+                        padding: const EdgeInsets.all(8),
+                        color: Colors.white,
+                        child: Center(
+                            child: Text(data['ticket$i']["2"][4] == 0
+                                ? ""
+                                : data['ticket$i']["2"][4].toString())),
+                      ),
+                      Container(
+                        padding: const EdgeInsets.all(8),
+                        color: Colors.orange,
+                        child: Center(
+                            child: Text(data['ticket$i']["2"][5] == 0
+                                ? ""
+                                : data['ticket$i']["2"][5].toString())),
+                      ),
+                      Container(
+                        padding: const EdgeInsets.all(8),
+                        color: Colors.white,
+                        child: Center(
+                            child: Text(data['ticket$i']["2"][6] == 0
+                                ? ""
+                                : data['ticket$i']["2"][6].toString())),
+                      ),
+                      Container(
+                        padding: const EdgeInsets.all(8),
+                        color: Colors.orange,
+                        child: Center(
+                            child: Text(data['ticket$i']["2"][7] == 0
+                                ? ""
+                                : data['ticket$i']["2"][7].toString())),
+                      ),
+                      Container(
+                        padding: const EdgeInsets.all(8),
+                        color: Colors.white,
+                        child: Center(
+                            child: Text(data['ticket$i']["2"][8] == 0
+                                ? ""
+                                : data['ticket$i']["2"][8].toString())),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            )),
+
+      ],
+    );
   }
 }
