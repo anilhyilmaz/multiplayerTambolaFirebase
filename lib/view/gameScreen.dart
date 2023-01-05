@@ -1,9 +1,9 @@
+import 'dart:math';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import '../ProviderState.dart';
-import '../widgets/showTambolaGrid.dart';
 
 class gameScreen extends StatefulWidget {
   const gameScreen({super.key});
@@ -43,20 +43,33 @@ class _gameScreenState extends State<gameScreen> {
                       snapshot.connectionState == ConnectionState.done) {
                     var data = snapshot.data.data();
                     List<int> playerCounterList = [];
+                    List<int> one = [1];
                     var playerCounter = int.parse(data['playerCounter']) + 1;
                     for (int i = 0; i < playerCounter; i++) {
                       playerCounterList.add(i);
                     }
-                    return SingleChildScrollView(
-                        scrollDirection: Axis.horizontal,
-                        child: Row(
-                          children: [
-                            for (var i in playerCounterList)
-                              Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [Ticket(data, i)]),
-                          ],
-                        ));
+
+                    return Column(
+                      children: [
+                        SingleChildScrollView(
+                            scrollDirection: Axis.horizontal,
+                            child: Row(
+                              children: [
+                                for (var i in playerCounterList)
+                                  Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [Ticket(data, i)]),
+                              ],
+                            )),
+                        Row(children: [
+                          Padding(
+                            padding: const EdgeInsets.only(left: 32,right: 16),
+                            child: GestureDetector(child: Text("Pick Number"),onTap:()=> Provider.of<providerState>(context, listen: false).RandomNumbers()),
+                          ),
+                          Expanded(flex: 1,child: Text("Numbers: ${Provider.of<providerState>(context, listen: false).Numbers}"),)
+                        ])
+                      ],
+                    );
                   } else {
                     return const Text("Error");
                   }
@@ -69,259 +82,278 @@ class _gameScreenState extends State<gameScreen> {
     ));
   }
 
+
+
+
+
   Widget Ticket(var data, var i) {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        SizedBox(height: 10,),
-        const SizedBox(
-          child: Text("f"),
-        ),
-        SizedBox(height: 10,),
-        Container(
-            alignment: Alignment.center,
-            height: MediaQuery.of(context).size.height-64,
-            width: MediaQuery.of(context).size.width,
-            child: CustomScrollView(
-              slivers: <Widget>[
-                SliverPadding(
-                  padding: const EdgeInsets.only(left: 8,right: 32,top: 6,bottom: 0),
-                  sliver: SliverGrid.count(
-                    crossAxisSpacing: 10,
-                    mainAxisSpacing: 10,
-                    crossAxisCount: 9,
-                    children: <Widget>[
-                      Container(
-                        padding: const EdgeInsets.all(8),
-                        color: Colors.white,
-                        child: Center(
-                          child: Text(
-                              data['ticket$i']["0"][0] == 0
-                                  ? ""
-                                  : data['ticket$i']["0"][0].toString(),
-                              textAlign: TextAlign.center),
-                        ),
-                      ),
-                      Container(
-                        padding: const EdgeInsets.all(8),
-                        color: Colors.orange,
-                        child: Center(
-                          child: Text(data['ticket$i']["0"][1] == 0
-                              ? ""
-                              : data['ticket$i']["0"][1].toString()),
-                        ),
-                      ),
-                      Container(
-                        padding: const EdgeInsets.all(8),
-                        color: Colors.white,
-                        child: Center(
-                          child: Text(data['ticket$i']["0"][2] == 0
-                              ? ""
-                              : data['ticket$i']["0"][2].toString()),
-                        ),
-                      ),
-                      Container(
-                        padding: const EdgeInsets.all(8),
-                        color: Colors.orange,
-                        child: Center(
-                          child: Text(
-                            data['ticket$i']["0"][3] == 0
-                                ? ""
-                                : data['ticket$i']["0"][3].toString(),
-                            textAlign: TextAlign.center,
+        Padding(
+          padding:
+              const EdgeInsets.only(right: 16, left: 16, top: 18, bottom: 16),
+          child: Container(
+            padding: EdgeInsets.only(left: 16, right: 16, top: 8),
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.all(Radius.circular(16)),
+                border: Border.all(color: Colors.blueAccent)),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                SizedBox(
+                  child: Text(data['player$i']),
+                ),
+                Container(
+                    alignment: Alignment.center,
+                    height: MediaQuery.of(context).size.height - 120,
+                    width: MediaQuery.of(context).size.width,
+                    child: CustomScrollView(
+                      slivers: <Widget>[
+                        SliverPadding(
+                          padding: const EdgeInsets.only(
+                              left: 16, right: 32, top: 24, bottom: 0),
+                          sliver: SliverGrid.count(
+                            crossAxisSpacing: 10,
+                            mainAxisSpacing: 10,
+                            crossAxisCount: 9,
+                            children: <Widget>[
+                              Container(
+                                padding: const EdgeInsets.all(8),
+                                color: Colors.white,
+                                child: Center(
+                                  child: Text(
+                                      data['ticket$i']["0"][0] == 0
+                                          ? ""
+                                          : data['ticket$i']["0"][0].toString(),
+                                      textAlign: TextAlign.center),
+                                ),
+                              ),
+                              Container(
+                                padding: const EdgeInsets.all(8),
+                                color: Colors.orange,
+                                child: Center(
+                                  child: Text(data['ticket$i']["0"][1] == 0
+                                      ? ""
+                                      : data['ticket$i']["0"][1].toString()),
+                                ),
+                              ),
+                              Container(
+                                padding: const EdgeInsets.all(8),
+                                color: Colors.white,
+                                child: Center(
+                                  child: Text(data['ticket$i']["0"][2] == 0
+                                      ? ""
+                                      : data['ticket$i']["0"][2].toString()),
+                                ),
+                              ),
+                              Container(
+                                padding: const EdgeInsets.all(8),
+                                color: Colors.orange,
+                                child: Center(
+                                  child: Text(
+                                    data['ticket$i']["0"][3] == 0
+                                        ? ""
+                                        : data['ticket$i']["0"][3].toString(),
+                                    textAlign: TextAlign.center,
+                                  ),
+                                ),
+                              ),
+                              Container(
+                                  padding: const EdgeInsets.all(8),
+                                  color: Colors.white,
+                                  child: Center(
+                                    child: Text(data['ticket$i']["0"][4] == 0
+                                        ? ""
+                                        : data['ticket$i']["0"][4].toString()),
+                                  )),
+                              Container(
+                                padding: const EdgeInsets.all(8),
+                                color: Colors.orange,
+                                child: Center(
+                                  child: Text(data['ticket$i']["0"][5] == 0
+                                      ? ""
+                                      : data['ticket$i']["0"][5].toString()),
+                                ),
+                              ),
+                              Container(
+                                padding: const EdgeInsets.all(8),
+                                color: Colors.white,
+                                child: Center(
+                                    child: Text(data['ticket$i']["0"][6] == 0
+                                        ? ""
+                                        : data['ticket$i']["0"][6].toString())),
+                              ),
+                              Container(
+                                padding: const EdgeInsets.all(8),
+                                color: Colors.orange,
+                                child: Center(
+                                    child: Text(data['ticket$i']["0"][7] == 0
+                                        ? ""
+                                        : data['ticket$i']["0"][7].toString())),
+                              ),
+                              Container(
+                                padding: const EdgeInsets.all(8),
+                                color: Colors.white,
+                                child: Center(
+                                    child: Text(data['ticket$i']["0"][8] == 0
+                                        ? ""
+                                        : data['ticket$i']["0"][8].toString())),
+                              ),
+                              Container(
+                                padding: const EdgeInsets.all(8),
+                                color: Colors.orange,
+                                child: Center(
+                                    child: Text(data['ticket$i']["1"][0] == 0
+                                        ? ""
+                                        : data['ticket$i']["1"][0].toString())),
+                              ),
+                              Container(
+                                padding: const EdgeInsets.all(8),
+                                color: Colors.white,
+                                child: Center(
+                                    child: Text(data['ticket$i']["1"][1] == 0
+                                        ? ""
+                                        : data['ticket$i']["1"][1].toString())),
+                              ),
+                              Container(
+                                padding: const EdgeInsets.all(8),
+                                color: Colors.orange,
+                                child: Center(
+                                    child: Text(data['ticket$i']["1"][2] == 0
+                                        ? ""
+                                        : data['ticket$i']["1"][2].toString())),
+                              ),
+                              Container(
+                                padding: const EdgeInsets.all(8),
+                                color: Colors.white,
+                                child: Center(
+                                    child: Text(data['ticket$i']["1"][3] == 0
+                                        ? ""
+                                        : data['ticket$i']["1"][3].toString())),
+                              ),
+                              Container(
+                                padding: const EdgeInsets.all(8),
+                                color: Colors.orange,
+                                child: Center(
+                                    child: Text(data['ticket$i']["1"][4] == 0
+                                        ? ""
+                                        : data['ticket$i']["1"][4].toString())),
+                              ),
+                              Container(
+                                padding: const EdgeInsets.all(8),
+                                color: Colors.white,
+                                child: Center(
+                                    child: Text(data['ticket$i']["1"][5] == 0
+                                        ? ""
+                                        : data['ticket$i']["1"][5].toString())),
+                              ),
+                              Container(
+                                padding: const EdgeInsets.all(8),
+                                color: Colors.orange,
+                                child: Center(
+                                    child: Text(data['ticket$i']["1"][6] == 0
+                                        ? ""
+                                        : data['ticket$i']["1"][6].toString())),
+                              ),
+                              Container(
+                                padding: const EdgeInsets.all(8),
+                                color: Colors.white,
+                                child: Center(
+                                    child: Text(data['ticket$i']["1"][7] == 0
+                                        ? ""
+                                        : data['ticket$i']["1"][7].toString())),
+                              ),
+                              Container(
+                                padding: const EdgeInsets.all(8),
+                                color: Colors.orange,
+                                child: Center(
+                                    child: Text(data['ticket$i']["1"][8] == 0
+                                        ? ""
+                                        : data['ticket$i']["1"][8].toString())),
+                              ),
+                              Container(
+                                padding: const EdgeInsets.all(8),
+                                color: Colors.white,
+                                child: Center(
+                                    child: Text(data['ticket$i']["2"][0] == 0
+                                        ? ""
+                                        : data['ticket$i']["2"][0].toString())),
+                              ),
+                              Container(
+                                padding: const EdgeInsets.all(8),
+                                color: Colors.orange,
+                                child: Center(
+                                    child: Text(data['ticket$i']["2"][1] == 0
+                                        ? ""
+                                        : data['ticket$i']["2"][1].toString())),
+                              ),
+                              Container(
+                                padding: const EdgeInsets.all(8),
+                                color: Colors.white,
+                                child: Center(
+                                    child: Text(data['ticket$i']["2"][2] == 0
+                                        ? ""
+                                        : data['ticket$i']["2"][2].toString())),
+                              ),
+                              Container(
+                                padding: const EdgeInsets.all(8),
+                                color: Colors.orange,
+                                child: Center(
+                                    child: Text(data['ticket$i']["2"][3] == 0
+                                        ? ""
+                                        : data['ticket$i']["2"][3].toString())),
+                              ),
+                              Container(
+                                padding: const EdgeInsets.all(8),
+                                color: Colors.white,
+                                child: Center(
+                                    child: Text(data['ticket$i']["2"][4] == 0
+                                        ? ""
+                                        : data['ticket$i']["2"][4].toString())),
+                              ),
+                              Container(
+                                padding: const EdgeInsets.all(8),
+                                color: Colors.orange,
+                                child: Center(
+                                    child: Text(data['ticket$i']["2"][5] == 0
+                                        ? ""
+                                        : data['ticket$i']["2"][5].toString())),
+                              ),
+                              Container(
+                                padding: const EdgeInsets.all(8),
+                                color: Colors.white,
+                                child: Center(
+                                    child: Text(data['ticket$i']["2"][6] == 0
+                                        ? ""
+                                        : data['ticket$i']["2"][6].toString())),
+                              ),
+                              Container(
+                                padding: const EdgeInsets.all(8),
+                                color: Colors.orange,
+                                child: Center(
+                                    child: Text(data['ticket$i']["2"][7] == 0
+                                        ? ""
+                                        : data['ticket$i']["2"][7].toString())),
+                              ),
+                              Container(
+                                padding: const EdgeInsets.all(8),
+                                color: Colors.white,
+                                child: Center(
+                                    child: Text(data['ticket$i']["2"][8] == 0
+                                        ? ""
+                                        : data['ticket$i']["2"][8].toString())),
+                              ),
+                            ],
                           ),
                         ),
-                      ),
-                      Container(
-                          padding: const EdgeInsets.all(8),
-                          color: Colors.white,
-                          child: Center(
-                            child: Text(data['ticket$i']["0"][4] == 0
-                                ? ""
-                                : data['ticket$i']["0"][4].toString()),
-                          )),
-                      Container(
-                        padding: const EdgeInsets.all(8),
-                        color: Colors.orange,
-                        child: Center(
-                          child: Text(data['ticket$i']["0"][5] == 0
-                              ? ""
-                              : data['ticket$i']["0"][5].toString()),
-                        ),
-                      ),
-                      Container(
-                        padding: const EdgeInsets.all(8),
-                        color: Colors.white,
-                        child: Center(
-                            child: Text(data['ticket$i']["0"][6] == 0
-                                ? ""
-                                : data['ticket$i']["0"][6].toString())),
-                      ),
-                      Container(
-                        padding: const EdgeInsets.all(8),
-                        color: Colors.orange,
-                        child: Center(
-                            child: Text(data['ticket$i']["0"][7] == 0
-                                ? ""
-                                : data['ticket$i']["0"][7].toString())),
-                      ),
-                      Container(
-                        padding: const EdgeInsets.all(8),
-                        color: Colors.white,
-                        child: Center(
-                            child: Text(data['ticket$i']["0"][8] == 0
-                                ? ""
-                                : data['ticket$i']["0"][8].toString())),
-                      ),
-                      Container(
-                        padding: const EdgeInsets.all(8),
-                        color: Colors.orange,
-                        child: Center(
-                            child: Text(data['ticket$i']["1"][0] == 0
-                                ? ""
-                                : data['ticket$i']["1"][0].toString())),
-                      ),
-                      Container(
-                        padding: const EdgeInsets.all(8),
-                        color: Colors.white,
-                        child: Center(
-                            child: Text(data['ticket$i']["1"][1] == 0
-                                ? ""
-                                : data['ticket$i']["1"][1].toString())),
-                      ),
-                      Container(
-                        padding: const EdgeInsets.all(8),
-                        color: Colors.orange,
-                        child: Center(
-                            child: Text(data['ticket$i']["1"][2] == 0
-                                ? ""
-                                : data['ticket$i']["1"][2].toString())),
-                      ),
-                      Container(
-                        padding: const EdgeInsets.all(8),
-                        color: Colors.white,
-                        child: Center(
-                            child: Text(data['ticket$i']["1"][3] == 0
-                                ? ""
-                                : data['ticket$i']["1"][3].toString())),
-                      ),
-                      Container(
-                        padding: const EdgeInsets.all(8),
-                        color: Colors.orange,
-                        child: Center(
-                            child: Text(data['ticket$i']["1"][4] == 0
-                                ? ""
-                                : data['ticket$i']["1"][4].toString())),
-                      ),
-                      Container(
-                        padding: const EdgeInsets.all(8),
-                        color: Colors.white,
-                        child: Center(
-                            child: Text(data['ticket$i']["1"][5] == 0
-                                ? ""
-                                : data['ticket$i']["1"][5].toString())),
-                      ),
-                      Container(
-                        padding: const EdgeInsets.all(8),
-                        color: Colors.orange,
-                        child: Center(
-                            child: Text(data['ticket$i']["1"][6] == 0
-                                ? ""
-                                : data['ticket$i']["1"][6].toString())),
-                      ),
-                      Container(
-                        padding: const EdgeInsets.all(8),
-                        color: Colors.white,
-                        child: Center(
-                            child: Text(data['ticket$i']["1"][7] == 0
-                                ? ""
-                                : data['ticket$i']["1"][7].toString())),
-                      ),
-                      Container(
-                        padding: const EdgeInsets.all(8),
-                        color: Colors.orange,
-                        child: Center(
-                            child: Text(data['ticket$i']["1"][8] == 0
-                                ? ""
-                                : data['ticket$i']["1"][8].toString())),
-                      ),
-                      Container(
-                        padding: const EdgeInsets.all(8),
-                        color: Colors.white,
-                        child: Center(
-                            child: Text(data['ticket$i']["2"][0] == 0
-                                ? ""
-                                : data['ticket$i']["2"][0].toString())),
-                      ),
-                      Container(
-                        padding: const EdgeInsets.all(8),
-                        color: Colors.orange,
-                        child: Center(
-                            child: Text(data['ticket$i']["2"][1] == 0
-                                ? ""
-                                : data['ticket$i']["2"][1].toString())),
-                      ),
-                      Container(
-                        padding: const EdgeInsets.all(8),
-                        color: Colors.white,
-                        child: Center(
-                            child: Text(data['ticket$i']["2"][2] == 0
-                                ? ""
-                                : data['ticket$i']["2"][2].toString())),
-                      ),
-                      Container(
-                        padding: const EdgeInsets.all(8),
-                        color: Colors.orange,
-                        child: Center(
-                            child: Text(data['ticket$i']["2"][3] == 0
-                                ? ""
-                                : data['ticket$i']["2"][3].toString())),
-                      ),
-                      Container(
-                        padding: const EdgeInsets.all(8),
-                        color: Colors.white,
-                        child: Center(
-                            child: Text(data['ticket$i']["2"][4] == 0
-                                ? ""
-                                : data['ticket$i']["2"][4].toString())),
-                      ),
-                      Container(
-                        padding: const EdgeInsets.all(8),
-                        color: Colors.orange,
-                        child: Center(
-                            child: Text(data['ticket$i']["2"][5] == 0
-                                ? ""
-                                : data['ticket$i']["2"][5].toString())),
-                      ),
-                      Container(
-                        padding: const EdgeInsets.all(8),
-                        color: Colors.white,
-                        child: Center(
-                            child: Text(data['ticket$i']["2"][6] == 0
-                                ? ""
-                                : data['ticket$i']["2"][6].toString())),
-                      ),
-                      Container(
-                        padding: const EdgeInsets.all(8),
-                        color: Colors.orange,
-                        child: Center(
-                            child: Text(data['ticket$i']["2"][7] == 0
-                                ? ""
-                                : data['ticket$i']["2"][7].toString())),
-                      ),
-                      Container(
-                        padding: const EdgeInsets.all(8),
-                        color: Colors.white,
-                        child: Center(
-                            child: Text(data['ticket$i']["2"][8] == 0
-                                ? ""
-                                : data['ticket$i']["2"][8].toString())),
-                      ),
-                    ],
-                  ),
-                ),
+                      ],
+                    )),
               ],
-            )),
-
+            ),
+          ),
+        ),
       ],
     );
   }

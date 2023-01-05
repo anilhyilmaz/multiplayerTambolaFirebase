@@ -27,7 +27,7 @@ class _CreateOrJoinGameState extends State<CreateOrJoinGame> {
         print(Provider.of<providerState>(context, listen: false).entryCode);
         // response = await Dio().get('http://10.0.2.2:3000/getTicket/2');
         gameid = await Firestore.collection("games").add({
-          "owner": username.text,
+          "player0": username.text,
           "entryCode":
               Provider.of<providerState>(context, listen: false).entryCode,
           "playerCounter":0,

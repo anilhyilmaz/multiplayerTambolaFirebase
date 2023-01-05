@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 
 
@@ -8,8 +10,11 @@ class providerState extends ChangeNotifier{
   TextEditingController joinGameCodeTextEditing = new TextEditingController();
   List tickets = [];
   List names = [""];
+  var Numbers = [];
 
-  bool gg(){
-    return !shouldshow;
+  RandomNumbers() {
+    num randomminmax = 1 + Random().nextInt(99-1);
+    Numbers.add(randomminmax);
+    notifyListeners();
   }
 }

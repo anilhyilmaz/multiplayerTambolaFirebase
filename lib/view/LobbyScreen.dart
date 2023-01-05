@@ -88,7 +88,7 @@ class _LobbyScreenState extends State<LobbyScreen> {
   }
 
   owner(snapshot) {
-    return Text("Owner: " + snapshot.data!["owner"]);
+    return Text("Owner: " + snapshot.data!["player0"]);
   }
 
   playersCounter(snapshot) {
