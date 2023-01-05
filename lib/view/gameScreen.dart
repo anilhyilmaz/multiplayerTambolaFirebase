@@ -1,4 +1,3 @@
-import 'dart:math';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -32,49 +31,43 @@ class _gameScreenState extends State<gameScreen> {
       child: Center(
         child: Column(
           children: [
-            Center(
-              child: FutureBuilder(
-                future: Firestore.collection("games")
-                    .doc(Provider.of<providerState>(context, listen: false)
-                        .gameID)
-                    .get(),
-                builder: (BuildContext context, AsyncSnapshot snapshot) {
-                  if (snapshot.hasData &&
-                      snapshot.connectionState == ConnectionState.done) {
-                    var data = snapshot.data.data();
-                    List<int> playerCounterList = [];
-                    List<int> one = [1];
-                    var playerCounter = int.parse(data['playerCounter']) + 1;
-                    for (int i = 0; i < playerCounter; i++) {
-                      playerCounterList.add(i);
-                    }
-
-                    return Column(
-                      children: [
-                        SingleChildScrollView(
-                            scrollDirection: Axis.horizontal,
-                            child: Row(
-                              children: [
-                                for (var i in playerCounterList)
-                                  Column(
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: [Ticket(data, i)]),
-                              ],
-                            )),
-                        Row(children: [
-                          Padding(
-                            padding: const EdgeInsets.only(left: 32,right: 16),
-                            child: GestureDetector(child: Text("Pick Number"),onTap:()=> Provider.of<providerState>(context, listen: false).RandomNumbers()),
-                          ),
-                          Expanded(flex: 1,child: Text("Numbers: ${Provider.of<providerState>(context, listen: false).Numbers}"),)
-                        ])
-                      ],
-                    );
-                  } else {
-                    return const Text("Error");
+            FutureBuilder(
+              future: Firestore.collection("games")
+                  .doc(
+                      Provider.of<providerState>(context, listen: false).gameID)
+                  .get(),
+              builder: (BuildContext context, AsyncSnapshot snapshot) {
+                if (snapshot.hasData &&
+                    snapshot.connectionState == ConnectionState.done) {
+                  var data = snapshot.data.data();
+                  List<int> playerCounterList = [];
+                  List<int> one = [1];
+                  var playerCounter = int.parse(data['playerCounter']) + 1;
+                  for (int i = 0; i < playerCounter; i++) {
+                    playerCounterList.add(i);
                   }
-                },
-              ),
+
+                  return Column(
+                    children: [
+                      SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        child: Expanded(
+                            child: Row(
+                          children: [
+                            for (var i in playerCounterList)
+                              Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [Ticket(data, i)]),
+                          ],
+                        )),
+                      ),
+                  lastNumberWidget(),
+                    ],
+                  );
+                } else {
+                  return const Text("Error");
+                }
+              },
             )
           ],
         ),
@@ -82,9 +75,45 @@ class _gameScreenState extends State<gameScreen> {
     ));
   }
 
-
-
-
+  Widget lastNumberWidget() {
+    return StreamBuilder<Object>(
+        stream: Firestore.collection("games")
+            .doc(Provider.of<providerState>(context, listen: false).gameID)
+            .snapshots(),
+        builder: (BuildContext context, AsyncSnapshot snapshot) {
+          if (!snapshot.hasData) {
+            return const Text("Loading");
+          } else {
+            return Row(children: [
+              Padding(
+                padding: const EdgeInsets.only(left: 32, right: 16),
+                child: GestureDetector(
+                    child: Text("Pick Number"),
+                    onTap: () async => {
+                          print("f"),
+                          Provider.of<providerState>(context, listen: false)
+                              .RandomNumbers(),
+                          print(
+                              Provider.of<providerState>(context, listen: false)
+                                  .lastNumber),
+                          await Firestore.collection("games")
+                              .doc(Provider.of<providerState>(context,
+                                      listen: false)
+                                  .gameID)
+                              .update({
+                            "lastnumber": Provider.of<providerState>(context,
+                                    listen: false)
+                                .lastNumber
+                          }),
+                        }),
+              ),
+              Expanded(
+                child: Text("Numbers: ${snapshot.data!["lastnumber"]} "),
+              )
+            ]);
+          }
+        });
+  }
 
   Widget Ticket(var data, var i) {
     return Column(
@@ -92,7 +121,7 @@ class _gameScreenState extends State<gameScreen> {
       children: [
         Padding(
           padding:
-              const EdgeInsets.only(right: 16, left: 16, top: 18, bottom: 16),
+              const EdgeInsets.only(right: 16, left: 16, top: 4, bottom: 16),
           child: Container(
             padding: EdgeInsets.only(left: 16, right: 16, top: 8),
             decoration: BoxDecoration(
@@ -113,7 +142,7 @@ class _gameScreenState extends State<gameScreen> {
                       slivers: <Widget>[
                         SliverPadding(
                           padding: const EdgeInsets.only(
-                              left: 16, right: 32, top: 24, bottom: 0),
+                              left: 16, right: 32, top: 12, bottom: 0),
                           sliver: SliverGrid.count(
                             crossAxisSpacing: 10,
                             mainAxisSpacing: 10,

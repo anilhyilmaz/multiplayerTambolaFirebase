@@ -11,10 +11,19 @@ class providerState extends ChangeNotifier{
   List tickets = [];
   List names = [""];
   var Numbers = [];
+  var lastNumber = 0;
 
   RandomNumbers() {
-    num randomminmax = 1 + Random().nextInt(99-1);
-    Numbers.add(randomminmax);
+    lastNumber = 1 + Random().nextInt(99-1);
+    for(int i=0;i<Numbers.length;i++){
+      if(Numbers.contains(lastNumber)){
+        lastNumber = 1 + Random().nextInt(99-1);
+      }
+      else{
+        break;
+      }
+      Numbers.add(lastNumber);
+    }
     notifyListeners();
   }
 }
