@@ -111,6 +111,7 @@ class _LobbyScreenState extends State<LobbyScreen> {
     var counter = snapshot.data!["playerCounter"];
     counter = int.parse(counter);
     counter++;
+    Provider.of<providerState>(context, listen: false).playerCounter = counter;
     response = await Dio()
         .get("https://tombalaapiweb.onrender.com/getTicket/$counter");
     for (int i = 0; i < counter; i++) {

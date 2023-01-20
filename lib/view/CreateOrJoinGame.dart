@@ -32,6 +32,7 @@ class _CreateOrJoinGameState extends State<CreateOrJoinGame> {
               Provider.of<providerState>(context, listen: false).entryCode,
           "playerCounter":0,
           "isgameStarted":false,
+          "player0known":0,
           "lastnumber":"",
         });
         Provider.of<providerState>(context, listen: false).gameID = gameid.id;
@@ -63,7 +64,7 @@ class _CreateOrJoinGameState extends State<CreateOrJoinGame> {
               counter++;
               await Firestore.collection("games")
                   .doc(Provider.of<providerState>(context, listen: false).gameID)
-                  .update({
+                  .update({"player${counter}known":0,
                 "player${counter}":Provider.of<providerState>(context, listen: false).username.text,
                 "playerCounter":"${counter}"
               });

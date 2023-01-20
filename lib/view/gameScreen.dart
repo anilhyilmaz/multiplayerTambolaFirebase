@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import '../ProviderState.dart';
+import 'lastNumberTicketScreen.dart';
 
 class gameScreen extends StatefulWidget {
   const gameScreen({super.key});
@@ -51,17 +52,16 @@ class _gameScreenState extends State<gameScreen> {
                     children: [
                       SingleChildScrollView(
                         scrollDirection: Axis.horizontal,
-                        child: Expanded(
-                            child: Row(
+                        child: Wrap(children: [Row(
                           children: [
                             for (var i in playerCounterList)
                               Column(
                                   mainAxisSize: MainAxisSize.min,
                                   children: [Ticket(data, i)]),
                           ],
-                        )),
+                        )],),
                       ),
-                  lastNumberWidget(),
+                      const lastNumberTicketScreen(),
                     ],
                   );
                 } else {
@@ -75,46 +75,6 @@ class _gameScreenState extends State<gameScreen> {
     ));
   }
 
-  Widget lastNumberWidget() {
-    return StreamBuilder<Object>(
-        stream: Firestore.collection("games")
-            .doc(Provider.of<providerState>(context, listen: false).gameID)
-            .snapshots(),
-        builder: (BuildContext context, AsyncSnapshot snapshot) {
-          if (!snapshot.hasData) {
-            return const Text("Loading");
-          } else {
-            return Row(children: [
-              Padding(
-                padding: const EdgeInsets.only(left: 32, right: 16),
-                child: GestureDetector(
-                    child: Text("Pick Number"),
-                    onTap: () async => {
-                          print("f"),
-                          Provider.of<providerState>(context, listen: false)
-                              .RandomNumbers(),
-                          print(
-                              Provider.of<providerState>(context, listen: false)
-                                  .lastNumber),
-                          await Firestore.collection("games")
-                              .doc(Provider.of<providerState>(context,
-                                      listen: false)
-                                  .gameID)
-                              .update({
-                            "lastnumber": Provider.of<providerState>(context,
-                                    listen: false)
-                                .lastNumber
-                          }),
-                        }),
-              ),
-              Expanded(
-                child: Text("Numbers: ${snapshot.data!["lastnumber"]} "),
-              )
-            ]);
-          }
-        });
-  }
-
   Widget Ticket(var data, var i) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -123,17 +83,29 @@ class _gameScreenState extends State<gameScreen> {
           padding:
               const EdgeInsets.only(right: 16, left: 16, top: 4, bottom: 16),
           child: Container(
-            padding: EdgeInsets.only(left: 16, right: 16, top: 8),
+            padding: const EdgeInsets.only(left: 16, right: 16, top: 8),
             decoration: BoxDecoration(
-                borderRadius: BorderRadius.all(Radius.circular(16)),
+                borderRadius: const BorderRadius.all(Radius.circular(16)),
                 border: Border.all(color: Colors.blueAccent)),
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                SizedBox(
-                  child: Text(data['player$i']),
-                ),
+                Row(children: [
+                  Row(children: [
+                    Text("Owner: ${data['player$i']}"),
+                  ]),
+                  Row(
+                    children: [
+                      const Icon(
+                        Icons.check,
+                        color: Colors.pink,
+                        size: 24.0,
+                        semanticLabel:
+                            'Text to announce in accessibility modes',
+                      ),
+                      knownNumber(),
+                    ],
+                  )
+                ]),
                 Container(
                     alignment: Alignment.center,
                     height: MediaQuery.of(context).size.height - 120,
@@ -385,5 +357,9 @@ class _gameScreenState extends State<gameScreen> {
         ),
       ],
     );
+  }
+
+  knownNumber() {
+    return Text("2");
   }
 }
