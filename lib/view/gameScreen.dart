@@ -102,7 +102,15 @@ class _gameScreenState extends State<gameScreen> {
                         semanticLabel:
                             'Text to announce in accessibility modes',
                       ),
-                      knownNumber(),
+                      StreamBuilder<Object>(
+                          stream: Firestore.collection("games").doc(Provider.of<providerState>(context, listen: false).gameID).snapshots(),
+                          builder: (context, snapshot) {
+                            if (!snapshot.hasData) {
+                              return const Text("Loading");
+                            } else {
+                              return playerknownWidget(snapshot,i);
+                            }
+                          }),
                     ],
                   )
                 ]),
@@ -359,7 +367,7 @@ class _gameScreenState extends State<gameScreen> {
     );
   }
 
-  knownNumber() {
-    return Text("2");
+  Widget playerknownWidget(snapshot, i) {
+    return Text(snapshot.data!["player${i}known"].toString());
   }
 }
