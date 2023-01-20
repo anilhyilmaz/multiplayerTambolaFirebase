@@ -12,6 +12,7 @@ class providerState extends ChangeNotifier{
   List names = [""];
   var Numbers = [];
   int lastNumber = 0;
+  bool showinfo = true;
 
   RandomNumbers() {
     lastNumber = 1 + Random().nextInt(99-1);
