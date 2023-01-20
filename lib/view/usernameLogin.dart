@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tombalaonline/view/CreateOrJoinGame.dart';
@@ -117,10 +118,16 @@ class _usernameLoginState extends State<usernameLogin> {
           content: Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              new Image.asset('icons/flags/png/gb.png',
-                  package: 'country_icons'),
-              new Image.asset('icons/flags/png/tr.png',
-                  package: 'country_icons'),
+              GestureDetector(onTap: (){
+                context.setLocale(Locale('en', 'US'));
+                print(context.locale.toString());
+              },child: Image.asset('icons/flags/png/gb.png',
+                  package: 'country_icons'),),
+              GestureDetector(onTap: (){
+                context.setLocale(Locale('tr','TR'));
+                print(context.locale.toString());
+              },child: Image.asset('icons/flags/png/tr.png',
+                  package: 'country_icons'),),
             ],
           ),
           actions: <Widget>[
