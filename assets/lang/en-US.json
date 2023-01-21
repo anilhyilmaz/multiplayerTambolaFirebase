@@ -1,3 +1,15 @@
 {
-
+  "main": {
+    "username": "username",
+    "typeUsername": "type username",
+    "info": "Must be longer than 1 letters",
+    "login": "Login",
+    "setting": "settings",
+    "createRoom": "Create Room",
+    "joinRoom": "Join Room",
+    "typeRoomCode": "type room code",
+    "entryCode": "entry code",
+    "owner": "owner",
+    "playerWaiting": "waiting"
+  }
 }

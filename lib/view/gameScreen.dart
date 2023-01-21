@@ -42,8 +42,7 @@ class _gameScreenState extends State<gameScreen> {
                     snapshot.connectionState == ConnectionState.done) {
                   var data = snapshot.data.data();
                   List<int> playerCounterList = [];
-                  List<int> one = [1];
-                  var playerCounter = int.parse(data['playerCounter']) + 1;
+                  var playerCounter = data['playerCounter'] + 1;
                   for (int i = 0; i < playerCounter; i++) {
                     playerCounterList.add(i);
                   }

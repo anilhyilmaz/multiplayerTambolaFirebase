@@ -15,31 +15,28 @@ class LobbyScreen extends StatefulWidget {
   State<LobbyScreen> createState() => _LobbyScreenState();
 }
 
-  Timer? timer;
-
-
+Timer? timer;
 
 class _LobbyScreenState extends State<LobbyScreen> {
-
   var outsnapshot;
 
   @override
   void initState() {
     super.initState();
-    timer = Timer.periodic(Duration(seconds: 15), (Timer t) => checkIfGameStarted(outsnapshot));
+    timer = Timer.periodic(
+        Duration(seconds: 15), (Timer t) => checkIfGameStarted(outsnapshot));
   }
+
   @override
   void dispose() {
     timer?.cancel();
     super.dispose();
   }
 
-
   @override
   Widget build(BuildContext context) {
     FirebaseFirestore Firestore = FirebaseFirestore.instance;
     var gameID = Provider.of<providerState>(context, listen: false).gameID;
-
 
     return Scaffold(
       appBar: AppBar(title: Text("Waiting Room")),
@@ -96,24 +93,22 @@ class _LobbyScreenState extends State<LobbyScreen> {
         snapshot.data!["playerCounter"].toString() + " player is waiting");
   }
 
-  checkIfGameStarted(outsnapshot){
-    var started;
-    started = outsnapshot.data!["isgameStarted"];
-    started == true ? Navigator.of(context).pushReplacement(MaterialPageRoute(
-        builder: (BuildContext context) => gameScreen())) : null;
+  checkIfGameStarted(outsnapshot) {
+    var started = outsnapshot.data!["isgameStarted"];
+    started == true
+        ? Navigator.of(context).pushReplacement(
+            MaterialPageRoute(builder: (BuildContext context) => const gameScreen()))
+        : null;
   }
-
-
 
   startgame(snapshot) async {
     var response;
     FirebaseFirestore Firestore = FirebaseFirestore.instance;
-    var counter = snapshot.data!["playerCounter"];
-    counter = int.parse(counter);
+    int counter = snapshot.data!["playerCounter"];
     counter++;
-    Provider.of<providerState>(context, listen: false).playerCounter = counter;
-    response = await Dio()
-        .get("https://tombalaapiweb.onrender.com/getTicket/$counter");
+    response = await Dio().get(
+        "https://tombalaapiweb.onrender.com/getTicket/$counter");
+    print(response);
     for (int i = 0; i < counter; i++) {
       for (int j = 0; j < 3; j++) {
         await Firestore.collection("games")
@@ -123,9 +118,9 @@ class _LobbyScreenState extends State<LobbyScreen> {
     }
     await Firestore.collection("games")
         .doc(Provider.of<providerState>(context, listen: false).gameID)
-        .update({"isgameStarted":true});
-    // Navigator.of(context).pushReplacement(MaterialPageRoute(
-    //     builder: (BuildContext context) => gameScreen()));
+        .update({"isgameStarted": true});
+    // Navigator.of(context).pushReplacement(
+    //     MaterialPageRoute(builder: (BuildContext context) => gameScreen()));
   }
 
   // playerList(snapshot) {
