@@ -51,7 +51,7 @@ class _lastNumberTicketScreenState extends State<lastNumberTicketScreen> {
                               ////////////////////////////////////////////////////////////
 
                               for (int j = 0;
-                                  j < int.parse(snapshot.data!["playerCounter"]) + 1;
+                                  j < snapshot.data!["playerCounter"] + 1;
                                   j++)
                                 {
                                   print(await snapshot.data["ticket$j"]),
