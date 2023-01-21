@@ -1,5 +1,5 @@
 {
-  "main": {
+    "usernameScreen": "Username Screen",
     "username": "username",
     "typeUsername": "type username",
     "info": "Must be longer than 1 letters",
@@ -10,6 +10,10 @@
     "typeRoomCode": "type room code",
     "entryCode": "entry code",
     "owner": "owner",
-    "playerWaiting": "waiting"
-  }
+    "playerWaiting": "waiting",
+    "createorjoingame": "Create or Join Screen",
+    "lobbyscreen": "Lobby Screen",
+    "startgame": "start game",
+    "picknumber": "Pick number",
+    "lastNumber": "Last Number:"
 }

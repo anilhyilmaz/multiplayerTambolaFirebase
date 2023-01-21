@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dio/dio.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tombalaonline/view/gameScreen.dart';
@@ -39,7 +40,7 @@ class _LobbyScreenState extends State<LobbyScreen> {
     var gameID = Provider.of<providerState>(context, listen: false).gameID;
 
     return Scaffold(
-      appBar: AppBar(title: Text("Waiting Room")),
+      appBar: AppBar(centerTitle: true,title: Text("lobbyscreen".tr())),
       body: (Center(
         child: StreamBuilder<Object>(
             stream: Firestore.collection("games").doc(gameID).snapshots(),
@@ -70,7 +71,7 @@ class _LobbyScreenState extends State<LobbyScreen> {
                               //create start game
                               startgame(snapshot);
                             },
-                            child: const Text("Start Game")),
+                            child: Text("startgame".tr())),
                       ),
                     ]);
               }
@@ -81,16 +82,16 @@ class _LobbyScreenState extends State<LobbyScreen> {
 
   entryCode(snapshot) {
     outsnapshot = snapshot;
-    return Text("Entry Code:" + snapshot.data!["entryCode"]);
+    return Text("entryCode".tr() + ":" + "${snapshot.data!["entryCode"]}");
   }
 
   owner(snapshot) {
-    return Text("Owner: " + snapshot.data!["player0"]);
+    return Text("owner".tr() + ":" +  "${snapshot.data!["player0"]}");
   }
 
   playersCounter(snapshot) {
     return Text(
-        snapshot.data!["playerCounter"].toString() + " player is waiting");
+        snapshot.data!["playerCounter"].toString() + " " + "playerWaiting".tr());
   }
 
   checkIfGameStarted(outsnapshot) {

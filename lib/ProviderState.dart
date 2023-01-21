@@ -2,10 +2,9 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 
-
-class providerState extends ChangeNotifier{
+class providerState extends ChangeNotifier {
   bool shouldshow = true;
-  var gameID,entryCode,ticket,playerCounter,playerknown;
+  var gameID, entryCode, ticket, playerCounter, playerknown;
   TextEditingController username = new TextEditingController();
   TextEditingController joinGameCodeTextEditing = new TextEditingController();
   List tickets = [];
@@ -15,16 +14,12 @@ class providerState extends ChangeNotifier{
   bool showinfo = true;
 
   RandomNumbers() {
-    lastNumber = 1 + Random().nextInt(99-1);
-    for(int i=0;i<Numbers.length;i++){
-      if(Numbers.contains(lastNumber)){
-        lastNumber = 1 + Random().nextInt(99-1);
-      }
-      else{
-        break;
-      }
-      Numbers.add(lastNumber);
+    lastNumber = 1 + Random().nextInt(99 - 1);
+    print("len:  ${Numbers.length}");
+    if (Numbers.contains(lastNumber)) {
+      RandomNumbers();
     }
+    Numbers.add(lastNumber);
     notifyListeners();
   }
 }

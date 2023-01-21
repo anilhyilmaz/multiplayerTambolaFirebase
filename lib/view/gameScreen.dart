@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
@@ -90,7 +91,7 @@ class _gameScreenState extends State<gameScreen> {
               children: [
                 Row(children: [
                   Row(children: [
-                    Text("Owner: ${data['player$i']}"),
+                    Text("${"owner".tr()}: ${data['player$i']}"),
                   ]),
                   Row(
                     children: [
@@ -366,7 +367,12 @@ class _gameScreenState extends State<gameScreen> {
     );
   }
 
-  Widget playerknownWidget(snapshot, i) {
+
+
+
+
+
+  playerknownWidget(snapshot, i){
     return Text(snapshot.data!["player${i}known"].toString());
   }
 }

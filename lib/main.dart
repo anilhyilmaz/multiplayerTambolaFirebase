@@ -10,10 +10,13 @@ Future<void> main() async {
   await EasyLocalization.ensureInitialized();
   runApp(
     EasyLocalization(
-        supportedLocales: const [Locale('en', 'US'), Locale('tr','TR')],
-        path: 'assets/lang', // <-- change the path of the translation files
-        fallbackLocale: const Locale('en', 'US'),
-        child: MyApp()
+      supportedLocales: [
+        Locale("tr", "TR"),
+        Locale("en", "US"),
+      ],
+      saveLocale: true,
+      path: "assets/lang",
+      child: MyApp(),
     ),
   );
 }
@@ -29,9 +32,7 @@ class MyApp extends StatelessWidget {
         supportedLocales: context.supportedLocales,
         locale: context.locale,
         home: usernameLogin(),
-    ),
+      ),
     );
   }
 }
-
-

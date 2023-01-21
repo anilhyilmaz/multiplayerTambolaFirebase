@@ -1,3 +1,20 @@
 {
+    "usernameScreen": "Kullanıcı Adı Ekranı",
+    "username": "Kullanıcı Adı",
+    "typeUsername": "Kullanıcı Adınızı Giriniz",
+    "info": "1 karakterden uzun olmalı",
+    "login": "Giriş",
+    "setting": "Ayarlar",
+    "createRoom": "Oda Oluştur",
+    "joinRoom": "Odaya Giriş Yap",
+    "typeRoomCode": "Giriş kodunu yazınız",
+    "entryCode": "Giriş Kodu",
+    "owner": "Oda sahibi",
+    "playerWaiting": "kişi bekliyor",
+    "createorjoingame": "Oyun Oluşturma Ekranı",
+    "lobbyscreen": "Lobi Ekranı",
+    "startgame": "Start Game",
+    "picknumber": "Sayı Seç",
+    "lastNumber": "Son Sayı:"
 
 }

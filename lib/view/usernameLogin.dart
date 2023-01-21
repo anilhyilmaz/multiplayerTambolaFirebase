@@ -2,7 +2,6 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tombalaonline/view/CreateOrJoinGame.dart';
-import 'package:country_icons/country_icons.dart';
 import '../ProviderState.dart';
 
 class usernameLogin extends StatefulWidget {
@@ -18,7 +17,7 @@ class _usernameLoginState extends State<usernameLogin> {
     var username = Provider.of<providerState>(context, listen: false).username;
 
     return Scaffold(
-      appBar: AppBar(title: const Text("Username"), actions: [
+      appBar: AppBar(centerTitle: true,title: Text("usernameScreen".tr()), actions: [
         GestureDetector(
           onTap: () {
             _languageSettings();
@@ -54,7 +53,7 @@ class _usernameLoginState extends State<usernameLogin> {
                     print(Provider.of<providerState>(context, listen: false)
                         .showinfo);
                   },
-                  decoration: const InputDecoration(hintText: "Type username"),
+                  decoration: InputDecoration(hintText: "typeUsername".tr()),
                   textAlign: TextAlign.center,
                   controller: username,
                 ),
@@ -63,12 +62,12 @@ class _usernameLoginState extends State<usernameLogin> {
                 child: Provider.of<providerState>(context, listen: false)
                             .showinfo ==
                         true
-                    ? const Text("Must be bigger than 3 letters")
+                    ? Text("info".tr())
                     : const Text(""),
               ),
               OutlinedButton(
                   onPressed: () {
-                    if (username.text.length < 4) {
+                    if (username.text.length < 1) {
                       _showDialog();
                     } else {
                       Navigator.of(context).pushReplacement(MaterialPageRoute(
@@ -76,7 +75,7 @@ class _usernameLoginState extends State<usernameLogin> {
                               const CreateOrJoinGame()));
                     }
                   },
-                  child: Text("Type username")),
+                  child: Text("login".tr())),
             ],
           )
         ],

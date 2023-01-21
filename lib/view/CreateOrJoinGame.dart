@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dio/dio.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tombalaonline/utils/RandomCode.dart';
@@ -31,6 +32,7 @@ class _CreateOrJoinGameState extends State<CreateOrJoinGame> {
           "entryCode":
               Provider.of<providerState>(context, listen: false).entryCode,
           "playerCounter":0,
+          "isgamefinished":false,
           "isgameStarted":false,
           "player0known":0,
           "lastnumber":"",
@@ -81,7 +83,7 @@ class _CreateOrJoinGameState extends State<CreateOrJoinGame> {
     }
 
     return Scaffold(
-      appBar: AppBar(centerTitle: true, title: Text("Create or Join Game")),
+      appBar: AppBar(centerTitle: true, title: Text("createorjoingame".tr())),
       body: Center(
           child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -90,7 +92,7 @@ class _CreateOrJoinGameState extends State<CreateOrJoinGame> {
           Padding(
             padding: const EdgeInsets.all(16.0),
             child: TextField(
-              decoration: InputDecoration(hintText: "Type room code"),
+              decoration: InputDecoration(hintText: "typeRoomCode".tr()),
               textAlign: TextAlign.center,
               controller: Provider.of<providerState>(context, listen: false)
                   .joinGameCodeTextEditing,
@@ -101,13 +103,13 @@ class _CreateOrJoinGameState extends State<CreateOrJoinGame> {
                 //search room code
                 joingame();
               },
-              child: Text("Join room")),
+              child: Text("joinRoom".tr())),
           OutlinedButton(
               onPressed: () {
                 //create room
                 creategame();
               },
-              child: Text("Create room")),
+              child: Text("createRoom".tr())),
         ],
       )),
     );
