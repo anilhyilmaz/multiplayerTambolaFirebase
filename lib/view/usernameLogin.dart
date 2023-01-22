@@ -70,6 +70,7 @@ class _usernameLoginState extends State<usernameLogin> {
                     if (username.text.length < 1) {
                       _showDialog();
                     } else {
+                      Provider.of<providerState>(context, listen: false).usernameText = username.text;
                       Navigator.of(context).pushReplacement(MaterialPageRoute(
                           builder: (BuildContext context) =>
                               const CreateOrJoinGame()));
@@ -90,13 +91,13 @@ class _usernameLoginState extends State<usernameLogin> {
       builder: (BuildContext context) {
         // return object of type Dialog
         return AlertDialog(
-          title: const Text("Uyarı"),
-          content: const Text(
-              "Kullanıcı adınız 1 karakterden kısa ve 10 karakterden uzun olamaz."),
+          title: Text("Warning".tr()),
+          content: Text(
+              "errorUsernameInfo".tr()),
           actions: <Widget>[
             // usually buttons at the bottom of the dialog
             OutlinedButton(
-              child: new Text("Kapat"),
+              child: new Text("close".tr()),
               onPressed: () {
                 Navigator.of(context).pop();
               },

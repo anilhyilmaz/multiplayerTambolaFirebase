@@ -15,5 +15,9 @@
     "lobbyscreen": "Lobby Screen",
     "startgame": "start game",
     "picknumber": "Pick number",
-    "lastNumber": "Last Number:"
+    "lastNumber": "Last Number:",
+    "errorUsernameInfo": "Username can not be longer than 10 character and smaller than 1 character.",
+    "Warning": "Warning",
+    "close": "close",
+    "gameover": "Game Finished"
 }

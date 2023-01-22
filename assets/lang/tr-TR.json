@@ -13,8 +13,12 @@
     "playerWaiting": "kişi bekliyor",
     "createorjoingame": "Oyun Oluşturma Ekranı",
     "lobbyscreen": "Lobi Ekranı",
-    "startgame": "Start Game",
+    "startgame": "Oyunu Başlat",
     "picknumber": "Sayı Seç",
-    "lastNumber": "Son Sayı:"
+    "lastNumber": "Son Sayı:",
+    "errorUsernameInfo": "Kullanıcı adınız 1 karakterden kısa ve 10 karakterden uzun olamaz.",
+    "Warning": "Uyarı",
+    "close": "kapat",
+    "gameover": "Oyun Bitti"
 
 }

@@ -18,6 +18,7 @@ class _lastNumberTicketScreenState extends State<lastNumberTicketScreen> {
     FirebaseFirestore Firestore = FirebaseFirestore.instance;
     var a;
     bool isGameFinished = false;
+    var playerCounter;
 
     return StreamBuilder<Object>(
         stream: Firestore.collection("games")
@@ -32,9 +33,9 @@ class _lastNumberTicketScreenState extends State<lastNumberTicketScreen> {
                 Row(children: [
                   Padding(
                     padding: const EdgeInsets.only(left: 32, right: 16),
-                    child: GestureDetector(
+                    child: OutlinedButton(
                         child: Text("picknumber".tr()),
-                        onTap: () async => {
+                        onPressed: () async => {
                               if (snapshot.data["isgamefinished"] == true) {},
                               if (snapshot.data["isgamefinished"] == false)
                                 {
@@ -56,9 +57,18 @@ class _lastNumberTicketScreenState extends State<lastNumberTicketScreen> {
                                   }),
                                   ////////////////////////////////////////////////////////////
                                   //this code controls of last numbers for tickets
-                                  for (int j = 0;
-                                      j < snapshot.data!["playerCounter"] + 1;
-                                      j++)
+                                  if (snapshot.data!["playerCounter"] == 0)
+                                    {
+                                      playerCounter =
+                                          snapshot.data!["playerCounter"] + 1,
+                                    }
+                                  else
+                                    {
+                                      playerCounter = int.parse(
+                                              snapshot.data!["playerCounter"]) +
+                                          1,
+                                    },
+                                  for (int j = 0; j < playerCounter; j++)
                                     {
                                       print(await snapshot.data["ticket$j"]),
                                       a = await snapshot.data["ticket$j"],
@@ -128,7 +138,8 @@ class _lastNumberTicketScreenState extends State<lastNumberTicketScreen> {
                   ),
                   Expanded(
                     flex: 1,
-                    child: Text("${"lastNumber".tr()}${snapshot.data!["lastnumber"]}"),
+                    child: Text(
+                        "${"lastNumber".tr()}${snapshot.data!["lastnumber"]}"),
                   )
                 ])
               ],
@@ -144,12 +155,12 @@ class _lastNumberTicketScreenState extends State<lastNumberTicketScreen> {
       builder: (BuildContext context) {
         // return object of type Dialog
         return AlertDialog(
-          title: const Text("Uyarı"),
-          content: const Text("Oyun bitti"),
+          title: Text("Warning".tr()),
+          content: Text("gameover".tr()),
           actions: <Widget>[
             // usually buttons at the bottom of the dialog
             OutlinedButton(
-              child: new Text("Kapat"),
+              child: Text("close".tr()),
               onPressed: () {
                 Navigator.of(context).pop();
               },

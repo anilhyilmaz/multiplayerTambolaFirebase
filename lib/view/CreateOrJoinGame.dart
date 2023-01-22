@@ -36,6 +36,7 @@ class _CreateOrJoinGameState extends State<CreateOrJoinGame> {
           "isgameStarted":false,
           "player0known":0,
           "lastnumber":"",
+          "owner":Provider.of<providerState>(context, listen: false).usernameText,
         });
         Provider.of<providerState>(context, listen: false).gameID = gameid.id;
         Navigator.of(context).pushReplacement(MaterialPageRoute(
@@ -78,7 +79,8 @@ class _CreateOrJoinGameState extends State<CreateOrJoinGame> {
               print("uyuşmadı");
             }
           }
-        });
+        }
+        );
       }
     }
 

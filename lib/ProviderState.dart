@@ -12,6 +12,7 @@ class providerState extends ChangeNotifier {
   var Numbers = [];
   int lastNumber = 0;
   bool showinfo = true;
+  late String usernameText;
 
   RandomNumbers() {
     lastNumber = 1 + Random().nextInt(99 - 1);

@@ -15,6 +15,7 @@ class gameScreen extends StatefulWidget {
 
 class _gameScreenState extends State<gameScreen> {
   FirebaseFirestore Firestore = FirebaseFirestore.instance;
+  var playerCounter;
 
   @override
   void initState() {
@@ -43,7 +44,12 @@ class _gameScreenState extends State<gameScreen> {
                     snapshot.connectionState == ConnectionState.done) {
                   var data = snapshot.data.data();
                   List<int> playerCounterList = [];
-                  var playerCounter = data['playerCounter'] + 1;
+                  if(data['playerCounter'] == 0){
+                    playerCounter = data['playerCounter'] + 1;
+                  }
+                  else{
+                    playerCounter = int.parse(data['playerCounter']) + 1;
+                  }
                   for (int i = 0; i < playerCounter; i++) {
                     playerCounterList.add(i);
                   }
@@ -81,7 +87,7 @@ class _gameScreenState extends State<gameScreen> {
       children: [
         Padding(
           padding:
-              const EdgeInsets.only(right: 16, left: 16, top: 4, bottom: 16),
+              const EdgeInsets.only(right: 16, left: 16,top: 4,bottom: 6),
           child: Container(
             padding: const EdgeInsets.only(left: 16, right: 16, top: 8),
             decoration: BoxDecoration(

@@ -25,7 +25,7 @@ class _LobbyScreenState extends State<LobbyScreen> {
   void initState() {
     super.initState();
     timer = Timer.periodic(
-        Duration(seconds: 15), (Timer t) => checkIfGameStarted(outsnapshot));
+        Duration(seconds: 5), (Timer t) => checkIfGameStarted(outsnapshot));
   }
 
   @override
@@ -71,7 +71,7 @@ class _LobbyScreenState extends State<LobbyScreen> {
                               //create start game
                               startgame(snapshot);
                             },
-                            child: Text("startgame".tr())),
+                            child: Text("startgame".tr()))
                       ),
                     ]);
               }
@@ -89,6 +89,8 @@ class _LobbyScreenState extends State<LobbyScreen> {
     return Text("owner".tr() + ":" +  "${snapshot.data!["player0"]}");
   }
 
+
+
   playersCounter(snapshot) {
     return Text(
         snapshot.data!["playerCounter"].toString() + " " + "playerWaiting".tr());
@@ -103,9 +105,16 @@ class _LobbyScreenState extends State<LobbyScreen> {
   }
 
   startgame(snapshot) async {
-    var response;
+    var response,counter;
     FirebaseFirestore Firestore = FirebaseFirestore.instance;
-    int counter = snapshot.data!["playerCounter"];
+    ///////////////////////////
+    if(snapshot.data["playerCounter"] == 0){
+      counter = snapshot.data!["playerCounter"];
+    }
+    else{
+      counter = int.parse(snapshot.data!["playerCounter"]);
+    }
+    /////////////////////
     counter++;
     response = await Dio().get(
         "https://tombalaapiweb.onrender.com/getTicket/$counter");
