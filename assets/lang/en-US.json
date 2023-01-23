@@ -19,5 +19,7 @@
     "errorUsernameInfo": "Username can not be longer than 10 character and smaller than 1 character.",
     "Warning": "Warning",
     "close": "close",
-    "gameover": "Game Finished"
+    "gameover": "Game Finished",
+    "snackbarwrong": "Only room owner can start the game",
+    "snackbartrue": "Game is starting"
 }

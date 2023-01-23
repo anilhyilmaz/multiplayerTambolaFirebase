@@ -375,9 +375,6 @@ class _gameScreenState extends State<gameScreen> {
 
 
 
-
-
-
   playerknownWidget(snapshot, i){
     return Text(snapshot.data!["player${i}known"].toString());
   }
