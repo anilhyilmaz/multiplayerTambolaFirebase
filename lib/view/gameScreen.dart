@@ -2,8 +2,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:provider/provider.dart';
 import '../ProviderState.dart';
+import '../utils/ad_helper.dart';
 import 'lastNumberTicketScreen.dart';
 
 class gameScreen extends StatefulWidget {
@@ -16,6 +18,14 @@ class gameScreen extends StatefulWidget {
 class _gameScreenState extends State<gameScreen> {
   FirebaseFirestore Firestore = FirebaseFirestore.instance;
   var playerCounter;
+  final AdSize adSize = AdSize(height: 300, width: 50);
+  BannerAd? _bannerAd;
+
+
+  Future<InitializationStatus> _initGoogleMobileAds() {
+    // TODO: Initialize Google Mobile Ads SDK
+    return MobileAds.instance.initialize();
+  }
 
   @override
   void initState() {
@@ -25,6 +35,23 @@ class _gameScreenState extends State<gameScreen> {
       DeviceOrientation.landscapeRight,
       DeviceOrientation.landscapeLeft,
     ]);
+    _initGoogleMobileAds();
+    BannerAd(
+      adUnitId: AdHelper.bannerAdUnitId,
+      request: AdRequest(),
+      size: AdSize.banner,
+      listener: BannerAdListener(
+        onAdLoaded: (ad) {
+          setState(() {
+            _bannerAd = ad as BannerAd;
+          });
+        },
+        onAdFailedToLoad: (ad, err) {
+          print('Failed to load a banner ad: ${err.message}');
+          ad.dispose();
+        },
+      ),
+    ).load();
   }
 
   @override
@@ -87,7 +114,7 @@ class _gameScreenState extends State<gameScreen> {
       children: [
         Padding(
           padding:
-              const EdgeInsets.only(right: 16, left: 16,top: 4,bottom: 6),
+              const EdgeInsets.only(right: 16, left: 16,bottom: 6),
           child: Container(
             padding: const EdgeInsets.only(left: 16, right: 16, top: 8),
             decoration: BoxDecoration(

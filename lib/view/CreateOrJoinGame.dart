@@ -1,11 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:dio/dio.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tombalaonline/utils/RandomCode.dart';
 import 'package:tombalaonline/view/LobbyScreen.dart';
 import '../ProviderState.dart';
+import 'package:firebase_database/firebase_database.dart';
 
 class CreateOrJoinGame extends StatefulWidget {
   const CreateOrJoinGame({Key? key}) : super(key: key);
@@ -18,7 +18,9 @@ class _CreateOrJoinGameState extends State<CreateOrJoinGame> {
   @override
   Widget build(BuildContext context) {
     var username = Provider.of<providerState>(context, listen: false).username;
-    var gameid;
+    var gameid,counter;
+    final FirebaseDatabase database = FirebaseDatabase.instance;
+    FirebaseFirestore Firestore = FirebaseFirestore.instance;
 
     creategame() async {
       FirebaseFirestore Firestore = FirebaseFirestore.instance;
@@ -31,12 +33,13 @@ class _CreateOrJoinGameState extends State<CreateOrJoinGame> {
           "player0": username.text,
           "entryCode":
               Provider.of<providerState>(context, listen: false).entryCode,
-          "playerCounter":0,
-          "isgamefinished":false,
-          "isgameStarted":false,
-          "player0known":0,
-          "lastnumber":"",
-          "owner":Provider.of<providerState>(context, listen: false).usernameText,
+          "playerCounter": "0",
+          "isgamefinished": false,
+          "isgameStarted": false,
+          "player0known": 0,
+          "lastnumber": "",
+          "owner":
+              Provider.of<providerState>(context, listen: false).usernameText,
         });
         Provider.of<providerState>(context, listen: false).gameID = gameid.id;
         Navigator.of(context).pushReplacement(MaterialPageRoute(
@@ -46,43 +49,26 @@ class _CreateOrJoinGameState extends State<CreateOrJoinGame> {
         print(e.toString());
       }
     }
+
     joingame() async {
       if (mounted) {
-        print("joined");
-        var len,counter;
-        FirebaseFirestore Firestore = FirebaseFirestore.instance;
-        var gamesSnapshots = Firestore.collection("games").snapshots();
-        await gamesSnapshots.forEach((element) async {
-          len = element.docs.length;
-          for (int i = 0; i < len; i++) {
-            if (Provider.of<providerState>(context, listen: false)
-                    .joinGameCodeTextEditing
-                    .text ==
-                await element.docs[i].data()["entryCode"]) {
-              print("uyuştu");
-              print(element.docs[i].data()["entryCode"]);
-              Provider.of<providerState>(context, listen: false).gameID =
-                  element.docs[i].id;
-              counter = await element.docs[i].data()["playerCounter"];
-              counter++;
-              await Firestore.collection("games")
-                  .doc(Provider.of<providerState>(context, listen: false).gameID)
-                  .update({"player${counter}known":0,
-                "player${counter}":Provider.of<providerState>(context, listen: false).username.text,
-                "playerCounter":"${counter}"
-              });
-              print("eklendi");
-              Navigator.of(context).pushReplacement(MaterialPageRoute(
-                  builder: (BuildContext context) => LobbyScreen()));
-            }
-            else{
-              print("uyuşmadı");
-            }
-          }
-        }
-        );
+        Provider.of<providerState>(context, listen: false).ggg();
+        print("y");
+        Provider.of<providerState>(context, listen: false).counter++;
+        print(Provider.of<providerState>(context, listen: false).counter);
+        print(Provider.of<providerState>(context, listen: false).gameID);
+        Firestore.collection("games")
+            .doc(Provider.of<providerState>(context, listen: false).gameID)
+            .update({"player${Provider.of<providerState>(context, listen: false).counter}known":0,
+          "player${Provider.of<providerState>(context, listen: false).counter}":Provider.of<providerState>(context, listen: false).username.text,
+          "playerCounter":"${Provider.of<providerState>(context, listen: false).counter}"
+        });
+        print("eklendi");
+        Navigator.of(context).pushReplacement(MaterialPageRoute(
+            builder: (BuildContext context) => LobbyScreen()));
       }
     }
+
 
     return Scaffold(
       appBar: AppBar(centerTitle: true, title: Text("createorjoingame".tr())),

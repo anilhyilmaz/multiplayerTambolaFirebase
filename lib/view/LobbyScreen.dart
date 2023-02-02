@@ -6,8 +6,9 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tombalaonline/view/gameScreen.dart';
-
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import '../ProviderState.dart';
+import '../utils/ad_helper.dart';
 
 class LobbyScreen extends StatefulWidget {
   const LobbyScreen({Key? key}) : super(key: key);
@@ -20,9 +21,27 @@ Timer? timer;
 
 class _LobbyScreenState extends State<LobbyScreen> {
   var outsnapshot;
-
+  final AdSize adSize = AdSize(height: 300, width: 50);
+  BannerAd? _bannerAd;
   @override
   void initState() {
+    _initGoogleMobileAds();
+    BannerAd(
+      adUnitId: AdHelper.bannerAdUnitId,
+      request: AdRequest(),
+      size: AdSize.banner,
+      listener: BannerAdListener(
+        onAdLoaded: (ad) {
+          setState(() {
+            _bannerAd = ad as BannerAd;
+          });
+        },
+        onAdFailedToLoad: (ad, err) {
+          print('Failed to load a banner ad: ${err.message}');
+          ad.dispose();
+        },
+      ),
+    ).load();
     super.initState();
     timer = Timer.periodic(
         Duration(seconds: 5), (Timer t) => checkIfGameStarted(outsnapshot));
@@ -33,6 +52,13 @@ class _LobbyScreenState extends State<LobbyScreen> {
     timer?.cancel();
     super.dispose();
   }
+
+  Future<InitializationStatus> _initGoogleMobileAds() {
+    // TODO: Initialize Google Mobile Ads SDK
+    return MobileAds.instance.initialize();
+  }
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -72,6 +98,14 @@ class _LobbyScreenState extends State<LobbyScreen> {
                                   startgame(snapshot);
                                 },
                                 child: Text("startgame".tr()))),
+                        if (_bannerAd != null)
+                          Flexible(flex: 2,child: Align(
+                            child: Container(
+                              width: _bannerAd!.size.width.toDouble(),
+                              height: _bannerAd!.size.height.toDouble(),
+                              child: AdWidget(ad: _bannerAd!),
+                            ),
+                          ),)
                       ]);
                 }
               }),
@@ -106,6 +140,9 @@ class _LobbyScreenState extends State<LobbyScreen> {
   startgame(snapshot) async {
     if(snapshot.data!["owner"] == Provider.of<providerState>(context, listen: false).usernameText){
       print("dogru");
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text('snackbartrue'.tr()),
+      ));
       //create start game
       var response, counter;
       FirebaseFirestore Firestore = FirebaseFirestore.instance;
@@ -132,9 +169,6 @@ class _LobbyScreenState extends State<LobbyScreen> {
           .update({"isgameStarted": true});
       // Navigator.of(context).pushReplacement(
       //     MaterialPageRoute(builder: (BuildContext context) => gameScreen()))
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text('snackbartrue'.tr()),
-      ));
     }
     else{
       print("yanlış");

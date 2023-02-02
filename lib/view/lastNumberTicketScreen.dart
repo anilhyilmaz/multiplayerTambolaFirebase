@@ -1,9 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:provider/provider.dart';
 
 import '../ProviderState.dart';
+import '../utils/ad_helper.dart';
 
 class lastNumberTicketScreen extends StatefulWidget {
   const lastNumberTicketScreen({Key? key}) : super(key: key);
@@ -13,6 +15,37 @@ class lastNumberTicketScreen extends StatefulWidget {
 }
 
 class _lastNumberTicketScreenState extends State<lastNumberTicketScreen> {
+  final AdSize adSize = AdSize(height: 200, width: 10);
+  BannerAd? _bannerAd;
+
+  Future<InitializationStatus> _initGoogleMobileAds() {
+    // TODO: Initialize Google Mobile Ads SDK
+    return MobileAds.instance.initialize();
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _initGoogleMobileAds();
+    BannerAd(
+      adUnitId: AdHelper.bannerAdUnitId,
+      request: AdRequest(),
+      size: AdSize.banner,
+      listener: BannerAdListener(
+        onAdLoaded: (ad) {
+          setState(() {
+            _bannerAd = ad as BannerAd;
+          });
+        },
+        onAdFailedToLoad: (ad, err) {
+          print('Failed to load a banner ad: ${err.message}');
+          ad.dispose();
+        },
+      ),
+    ).load();
+  }
+
   @override
   Widget build(BuildContext context) {
     FirebaseFirestore Firestore = FirebaseFirestore.instance;
@@ -28,25 +61,44 @@ class _lastNumberTicketScreenState extends State<lastNumberTicketScreen> {
             return Wrap(
               children: [
                 Row(children: [
-                  Padding(
-                    padding: const EdgeInsets.only(left: 32, right: 16),
-                    child: snapshot.data!["owner"] == Provider.of<providerState>(context, listen: false).usernameText ? OutlinedButton(
-                        child: Text("picknumber".tr()),
-                        onPressed: () async => {
-                          if (snapshot.data["isgamefinished"] == true) {},
-                          if (snapshot.data["isgamefinished"] == false)
-                            {
-                              randomGenerateAndUpdate(),
-                              controlTicket(snapshot),
-                              /////////////////////////////////////////////
-                            },
-                        }) : null,
+                  Expanded(
+                    flex: 4,
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 32, right: 16),
+                      child: snapshot.data!["owner"] ==
+                              Provider.of<providerState>(context, listen: false)
+                                  .usernameText
+                          ? OutlinedButton(
+                              child: Text("picknumber".tr()),
+                              onPressed: () async => {
+                                    if (snapshot.data["isgamefinished"] == true)
+                                      {},
+                                    if (snapshot.data["isgamefinished"] ==
+                                        false)
+                                      {
+                                        randomGenerateAndUpdate(),
+                                        controlTicket(snapshot),
+                                        /////////////////////////////////////////////
+                                      },
+                                  })
+                          : null,
+                    ),
                   ),
                   Expanded(
-                    flex: 1,
+                    flex: 3,
                     child: Text(
                         "${"lastNumber".tr()}${snapshot.data!["lastnumber"]}"),
-                  )
+                  ),
+                  if (_bannerAd != null)
+                    Expanded(
+                        flex: 7,
+                        child: Align(
+                          child: Container(
+                            width: _bannerAd!.size.width.toDouble(),
+                            height: _bannerAd!.size.height.toDouble(),
+                            child: AdWidget(ad: _bannerAd!),
+                          ),
+                        )),
                 ])
               ],
             );

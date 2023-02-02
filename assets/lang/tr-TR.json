@@ -21,6 +21,9 @@
     "close": "kapat",
     "gameover": "Oyun Bitti",
     "snackbarwrong": "Sadece oda sahibi başlatabilir.",
-    "snackbartrue": "Oyun başlıyor"
+    "snackbartrue": "Oyun başlıyor",
+    "snackbarjoin": "Lobiye giriliyor lütfen bekleyiniz",
+    "snackbarwrongjoin": "Yanlış oda numarası",
+    "snackbarlobbygamenotstarted": "Geçersiz kod"
 
 }

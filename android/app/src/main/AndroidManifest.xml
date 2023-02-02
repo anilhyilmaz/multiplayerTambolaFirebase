@@ -1,9 +1,12 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.tombalamulti.tombalamulti.tombalaonline">
    <application
-        android:label="tombalaonline"
+        android:label="Multiplayer Tombala"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
+       <meta-data
+           android:name="com.google.android.gms.ads.APPLICATION_ID"
+           android:value="ca-app-pub-4109178583091990~9243906952"/>
         <activity
             android:name=".MainActivity"
             android:exported="true"

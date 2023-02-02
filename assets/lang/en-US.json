@@ -21,5 +21,8 @@
     "close": "close",
     "gameover": "Game Finished",
     "snackbarwrong": "Only room owner can start the game",
-    "snackbartrue": "Game is starting"
+    "snackbartrue": "Game is starting",
+    "snackbarjoin": "Joining lobby, please wait",
+    "snackbarwrongjoin": "Wrong room code",
+    "snackbarlobbygamenotstarted": "Invalid code"
 }
