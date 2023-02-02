@@ -24,6 +24,7 @@
     "snackbartrue": "Oyun başlıyor",
     "snackbarjoin": "Lobiye giriliyor lütfen bekleyiniz",
     "snackbarwrongjoin": "Yanlış oda numarası",
-    "snackbarlobbygamenotstarted": "Geçersiz kod"
+    "snackbarlobbygamenotstarted": "Geçersiz kod",
+    "validcode": "Kodu kontrol et"
 
 }

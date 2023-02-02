@@ -2,13 +2,11 @@ import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 class providerState extends ChangeNotifier {
-  bool shouldshow = true;
-  var gameID, entryCode, ticket,playerknown;
-  var counter;
-  late int playerCounter;
+  bool shouldshow = true, checkedCode = false;
+  var gameID, entryCode, ticket, playerknown;
+  late int counter;
   TextEditingController username = new TextEditingController();
   TextEditingController joinGameCodeTextEditing = new TextEditingController();
   List tickets = [];
@@ -28,7 +26,6 @@ class providerState extends ChangeNotifier {
     notifyListeners();
   }
 
-
   ggg() async {
     var len;
     FirebaseFirestore Firestore = FirebaseFirestore.instance;
@@ -36,17 +33,33 @@ class providerState extends ChangeNotifier {
     await gamesSnapshots.forEach((element) async {
       len = element.docs.length;
       for (int i = 0; i < len; i++) {
-        if (joinGameCodeTextEditing
-            .text ==
-            await element.docs[i].data()["entryCode"]) {
+        if (joinGameCodeTextEditing.text ==
+                await element.docs[i].data()["entryCode"] &&
+            element.docs[i].data()["isgameStarted"] == false) {
           print("uyuştu");
-          print(element.docs[i].data()["entryCode"]);
-          gameID = element.docs[i].id;
+          print(await element.docs[i].data()["entryCode"]);
+          gameID = await element.docs[i].id;
           counter = await int.parse(element.docs[i].data()["playerCounter"]);
+        } else {
+          print("invalid");
         }
       }
     });
     notifyListeners();
   }
 
+  g() {
+    FirebaseFirestore Firestore = FirebaseFirestore.instance;
+    print(counter.toString());
+    counter++;
+    print(counter.toString());
+    print(gameID);
+    Firestore.collection("games").doc(gameID).update({
+      "player${counter}known": 0,
+      "player${counter}": username.text,
+      "playerCounter": "${counter}"
+    });
+    print("eklendi");
+    notifyListeners();
+  }
 }

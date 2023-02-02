@@ -18,7 +18,7 @@ class gameScreen extends StatefulWidget {
 class _gameScreenState extends State<gameScreen> {
   FirebaseFirestore Firestore = FirebaseFirestore.instance;
   var playerCounter;
-  final AdSize adSize = AdSize(height: 300, width: 50);
+  // final AdSize adSize = AdSize(height: 300, width: 50);
   BannerAd? _bannerAd;
 
 
@@ -58,65 +58,57 @@ class _gameScreenState extends State<gameScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
         body: SafeArea(
-      child: Center(
-        child: Column(
-          children: [
-            FutureBuilder(
-              future: Firestore.collection("games")
-                  .doc(
-                      Provider.of<providerState>(context, listen: false).gameID)
-                  .get(),
-              builder: (BuildContext context, AsyncSnapshot snapshot) {
-                if (snapshot.hasData &&
-                    snapshot.connectionState == ConnectionState.done) {
-                  var data = snapshot.data.data();
-                  List<int> playerCounterList = [];
-                  if(data['playerCounter'] == 0){
-                    playerCounter = data['playerCounter'] + 1;
-                  }
-                  else{
-                    playerCounter = int.parse(data['playerCounter']) + 1;
-                  }
-                  for (int i = 0; i < playerCounter; i++) {
-                    playerCounterList.add(i);
-                  }
+          child: FutureBuilder(
+            future: Firestore.collection("games")
+                .doc(
+                Provider.of<providerState>(context, listen: false).gameID)
+                .get(),
+            builder: (BuildContext context, AsyncSnapshot snapshot) {
+              if (snapshot.hasData &&
+                  snapshot.connectionState == ConnectionState.done) {
+                var data = snapshot.data.data();
+                List<int> playerCounterList = [];
+                if(data['playerCounter'] == 0){
+                  playerCounter = data['playerCounter'] + 1;
+                }
+                else{
+                  playerCounter = int.parse(data['playerCounter']) + 1;
+                }
+                for (int i = 0; i < playerCounter; i++) {
+                  playerCounterList.add(i);
+                }
 
-                  return Column(
-                    children: [
-                      SingleChildScrollView(
+                return Column(
+                  children: [
+                    Expanded(flex: 10,child: SingleChildScrollView(
                         scrollDirection: Axis.horizontal,
-                        child: Wrap(children: [Row(
+                        child: Row(
                           children: [
                             for (var i in playerCounterList)
                               Column(
-                                  mainAxisSize: MainAxisSize.min,
                                   children: [Ticket(data, i)]),
                           ],
-                        )],),
-                      ),
-                      const lastNumberTicketScreen(),
-                    ],
-                  );
-                } else {
-                  return const Text("Error");
-                }
-              },
-            )
-          ],
-        ),
-      ),
-    ));
+                        )
+                    ),),
+                    Flexible(flex: 2,child: const lastNumberTicketScreen(),)
+                  ],
+                );
+              } else {
+                return const Text("Error");
+              }
+            },
+          ),
+        ));
   }
 
   Widget Ticket(var data, var i) {
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
           padding:
-              const EdgeInsets.only(right: 16, left: 16,bottom: 6),
+          const EdgeInsets.only(right: 16, left: 16),
           child: Container(
-            padding: const EdgeInsets.only(left: 16, right: 16, top: 8),
+            padding: const EdgeInsets.all(0),
             decoration: BoxDecoration(
                 borderRadius: const BorderRadius.all(Radius.circular(16)),
                 border: Border.all(color: Colors.blueAccent)),
@@ -133,7 +125,7 @@ class _gameScreenState extends State<gameScreen> {
                         color: Colors.pink,
                         size: 24.0,
                         semanticLabel:
-                            'Text to announce in accessibility modes',
+                        'Text to announce in accessibility modes',
                       ),
                       StreamBuilder<Object>(
                           stream: Firestore.collection("games").doc(Provider.of<providerState>(context, listen: false).gameID).snapshots(),

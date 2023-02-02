@@ -18,7 +18,7 @@ class _CreateOrJoinGameState extends State<CreateOrJoinGame> {
   @override
   Widget build(BuildContext context) {
     var username = Provider.of<providerState>(context, listen: false).username;
-    var gameid,counter;
+    var gameid, counter;
     final FirebaseDatabase database = FirebaseDatabase.instance;
     FirebaseFirestore Firestore = FirebaseFirestore.instance;
 
@@ -53,22 +53,11 @@ class _CreateOrJoinGameState extends State<CreateOrJoinGame> {
     joingame() async {
       if (mounted) {
         Provider.of<providerState>(context, listen: false).ggg();
-        print("y");
-        Provider.of<providerState>(context, listen: false).counter++;
-        print(Provider.of<providerState>(context, listen: false).counter);
-        print(Provider.of<providerState>(context, listen: false).gameID);
-        Firestore.collection("games")
-            .doc(Provider.of<providerState>(context, listen: false).gameID)
-            .update({"player${Provider.of<providerState>(context, listen: false).counter}known":0,
-          "player${Provider.of<providerState>(context, listen: false).counter}":Provider.of<providerState>(context, listen: false).username.text,
-          "playerCounter":"${Provider.of<providerState>(context, listen: false).counter}"
-        });
-        print("eklendi");
+        Provider.of<providerState>(context, listen: false).g();
         Navigator.of(context).pushReplacement(MaterialPageRoute(
             builder: (BuildContext context) => LobbyScreen()));
       }
     }
-
 
     return Scaffold(
       appBar: AppBar(centerTitle: true, title: Text("createorjoingame".tr())),
@@ -91,7 +80,10 @@ class _CreateOrJoinGameState extends State<CreateOrJoinGame> {
                 //search room code
                 joingame();
               },
-              child: Text("joinRoom".tr())),
+              child:
+                  Provider.of<providerState>(context, listen: false).checkedCode
+                      ? Text("joinroom".tr())
+                      : Text("validcode".tr())),
           OutlinedButton(
               onPressed: () {
                 //create room

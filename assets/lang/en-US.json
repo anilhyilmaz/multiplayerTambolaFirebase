@@ -24,5 +24,6 @@
     "snackbartrue": "Game is starting",
     "snackbarjoin": "Joining lobby, please wait",
     "snackbarwrongjoin": "Wrong room code",
-    "snackbarlobbygamenotstarted": "Invalid code"
+    "snackbarlobbygamenotstarted": "Invalid code",
+    "validcode": "Check code"
 }
