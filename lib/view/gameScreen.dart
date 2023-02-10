@@ -6,6 +6,7 @@ import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:provider/provider.dart';
 import '../ProviderState.dart';
 import '../utils/ad_helper.dart';
+import '../utils/ad_helperGecis.dart';
 import 'lastNumberTicketScreen.dart';
 
 class gameScreen extends StatefulWidget {
@@ -21,7 +22,6 @@ class _gameScreenState extends State<gameScreen> {
   // final AdSize adSize = AdSize(height: 300, width: 50);
   BannerAd? _bannerAd;
 
-
   Future<InitializationStatus> _initGoogleMobileAds() {
     // TODO: Initialize Google Mobile Ads SDK
     return MobileAds.instance.initialize();
@@ -36,6 +36,24 @@ class _gameScreenState extends State<gameScreen> {
       DeviceOrientation.landscapeLeft,
     ]);
     _initGoogleMobileAds();
+    BannerAd(
+      adUnitId: AdHelperGecis.bannerAdUnitId,
+      request: AdRequest(),
+      size: AdSize.banner,
+      listener: BannerAdListener(
+        onAdLoaded: (ad) {
+          setState(() {
+            _bannerAd = ad as BannerAd;
+          });
+        },
+        onAdFailedToLoad: (ad, err) {
+          print('Failed to load a banner ad: ${err.message}');
+          ad.dispose();
+        },
+      ),
+    ).load();
+
+    ///////////////////////////////
     BannerAd(
       adUnitId: AdHelper.bannerAdUnitId,
       request: AdRequest(),
@@ -58,55 +76,59 @@ class _gameScreenState extends State<gameScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
         body: SafeArea(
-          child: FutureBuilder(
-            future: Firestore.collection("games")
-                .doc(
-                Provider.of<providerState>(context, listen: false).gameID)
-                .get(),
-            builder: (BuildContext context, AsyncSnapshot snapshot) {
-              if (snapshot.hasData &&
-                  snapshot.connectionState == ConnectionState.done) {
-                var data = snapshot.data.data();
-                List<int> playerCounterList = [];
-                if(data['playerCounter'] == 0){
-                  playerCounter = data['playerCounter'] + 1;
-                }
-                else{
-                  playerCounter = int.parse(data['playerCounter']) + 1;
-                }
-                for (int i = 0; i < playerCounter; i++) {
-                  playerCounterList.add(i);
-                }
+      child: FutureBuilder(
+        future: Firestore.collection("games")
+            .doc(Provider.of<providerState>(context, listen: false).gameID)
+            .get(),
+        builder: (BuildContext context, AsyncSnapshot snapshot) {
+          if (snapshot.hasData &&
+              snapshot.connectionState == ConnectionState.done) {
+            var data = snapshot.data.data();
+            List<int> playerCounterList = [];
+            if (data['playerCounter'] == 0) {
+              playerCounter = data['playerCounter'] + 1;
+            } else {
+              playerCounter = int.parse(data['playerCounter']) + 1;
+            }
+            for (int i = 0; i < playerCounter; i++) {
+              playerCounterList.add(i);
+            }
 
-                return Column(
-                  children: [
-                    Expanded(flex: 10,child: SingleChildScrollView(
-                        scrollDirection: Axis.horizontal,
-                        child: Row(
-                          children: [
-                            for (var i in playerCounterList)
-                              Column(
-                                  children: [Ticket(data, i)]),
-                          ],
-                        )
-                    ),),
-                    Flexible(flex: 2,child: const lastNumberTicketScreen(),)
-                  ],
-                );
-              } else {
-                return const Text("Error");
-              }
-            },
-          ),
-        ));
+            return Column(
+              children: [
+                Expanded(
+                    flex: 12,
+                    child: Wrap(
+                      children: [
+                        SingleChildScrollView(
+                            scrollDirection: Axis.horizontal,
+                            child: Row(
+                              children: [
+                                for (var i in playerCounterList)
+                                  Column(children: [Ticket(data, i)]),
+                              ],
+                            )),
+                      ],
+                    )),
+                Flexible(
+                  flex: 2,
+                  child: const lastNumberTicketScreen(),
+                )
+              ],
+            );
+          } else {
+            return const Text("Error");
+          }
+        },
+      ),
+    ));
   }
 
   Widget Ticket(var data, var i) {
     return Column(
       children: [
         Padding(
-          padding:
-          const EdgeInsets.only(right: 16, left: 16),
+          padding: const EdgeInsets.only(right: 16, left: 16),
           child: Container(
             padding: const EdgeInsets.all(0),
             decoration: BoxDecoration(
@@ -125,15 +147,19 @@ class _gameScreenState extends State<gameScreen> {
                         color: Colors.pink,
                         size: 24.0,
                         semanticLabel:
-                        'Text to announce in accessibility modes',
+                            'Text to announce in accessibility modes',
                       ),
                       StreamBuilder<Object>(
-                          stream: Firestore.collection("games").doc(Provider.of<providerState>(context, listen: false).gameID).snapshots(),
+                          stream: Firestore.collection("games")
+                              .doc(Provider.of<providerState>(context,
+                                      listen: false)
+                                  .gameID)
+                              .snapshots(),
                           builder: (context, snapshot) {
                             if (!snapshot.hasData) {
                               return const Text("Loading");
                             } else {
-                              return playerknownWidget(snapshot,i);
+                              return playerknownWidget(snapshot, i);
                             }
                           }),
                     ],
@@ -392,9 +418,7 @@ class _gameScreenState extends State<gameScreen> {
     );
   }
 
-
-
-  playerknownWidget(snapshot, i){
+  playerknownWidget(snapshot, i) {
     return Text(snapshot.data!["player${i}known"].toString());
   }
 }

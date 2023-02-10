@@ -52,8 +52,13 @@ class _CreateOrJoinGameState extends State<CreateOrJoinGame> {
 
     joingame() async {
       if (mounted) {
-        Provider.of<providerState>(context, listen: false).ggg();
-        Provider.of<providerState>(context, listen: false).g();
+        await Provider.of<providerState>(context, listen: false).checkCode();
+        await Future.delayed(Duration(seconds: 3));
+        if(Provider.of<providerState>(context, listen: false).isvalidCode == true){
+          await Future.delayed(Duration(milliseconds: 800), () async {
+            await Provider.of<providerState>(context, listen: false).g();
+          });
+        }
         Navigator.of(context).pushReplacement(MaterialPageRoute(
             builder: (BuildContext context) => LobbyScreen()));
       }

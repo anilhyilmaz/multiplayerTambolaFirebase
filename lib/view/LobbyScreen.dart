@@ -68,48 +68,46 @@ class _LobbyScreenState extends State<LobbyScreen> {
     return Scaffold(
       appBar: AppBar(centerTitle: true, title: Text("lobbyscreen".tr())),
       body: (Center(
-        child: Flexible(
-          child: StreamBuilder<Object>(
-              stream: Firestore.collection("games").doc(gameID).snapshots(),
-              builder: (context, snapshot) {
-                if (!snapshot.hasData) {
-                  return const Text("Loading");
-                } else {
-                  return Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Flexible(
+        child: StreamBuilder<Object>(
+            stream: Firestore.collection("games").doc(gameID).snapshots(),
+            builder: (context, snapshot) {
+              if (!snapshot.hasData) {
+                return const Text("Loading");
+              } else {
+                return Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Flexible(
+                        flex: 1,
+                        child: entryCode(snapshot),
+                      ),
+                      Flexible(
+                        flex: 1,
+                        child: owner(snapshot),
+                      ),
+                      Flexible(
+                        flex: 1,
+                        child: playersCounter(snapshot),
+                      ),
+                      Flexible(
                           flex: 1,
-                          child: entryCode(snapshot),
-                        ),
-                        Flexible(
-                          flex: 1,
-                          child: owner(snapshot),
-                        ),
-                        Flexible(
-                          flex: 1,
-                          child: playersCounter(snapshot),
-                        ),
-                        Flexible(
-                            flex: 1,
-                            child: OutlinedButton(
-                                onPressed: () async {
-                                  startgame(snapshot);
-                                },
-                                child: Text("startgame".tr()))),
-                        if (_bannerAd != null)
-                          Flexible(flex: 2,child: Align(
-                            child: Container(
-                              width: _bannerAd!.size.width.toDouble(),
-                              height: _bannerAd!.size.height.toDouble(),
-                              child: AdWidget(ad: _bannerAd!),
-                            ),
-                          ),)
-                      ]);
-                }
-              }),
-        ),
+                          child: OutlinedButton(
+                              onPressed: () async {
+                                startgame(snapshot);
+                              },
+                              child: Text("startgame".tr()))),
+                      if (_bannerAd != null)
+                        Flexible(flex: 2,child: Align(
+                          child: Container(
+                            width: _bannerAd!.size.width.toDouble(),
+                            height: _bannerAd!.size.height.toDouble(),
+                            child: AdWidget(ad: _bannerAd!),
+                          ),
+                        ),)
+                    ]);
+              }
+            }),
       )),
     );
   }

@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 
 class providerState extends ChangeNotifier {
   bool shouldshow = true, checkedCode = false;
+  bool isvalidCode = false;
   var gameID, entryCode, ticket, playerknown;
   late int counter;
   TextEditingController username = new TextEditingController();
@@ -26,17 +27,18 @@ class providerState extends ChangeNotifier {
     notifyListeners();
   }
 
-  ggg() async {
+  checkCode() async {
     var len;
     FirebaseFirestore Firestore = FirebaseFirestore.instance;
     var gamesSnapshots = Firestore.collection("games").snapshots();
-    await gamesSnapshots.forEach((element) async {
+    gamesSnapshots.forEach((element) async {
       len = element.docs.length;
       for (int i = 0; i < len; i++) {
         if (joinGameCodeTextEditing.text ==
                 await element.docs[i].data()["entryCode"] &&
             element.docs[i].data()["isgameStarted"] == false) {
           print("uyuştu");
+          isvalidCode = true;
           print(await element.docs[i].data()["entryCode"]);
           gameID = await element.docs[i].id;
           counter = await int.parse(element.docs[i].data()["playerCounter"]);
